@@ -117,9 +117,35 @@
         }
         
         .coverage-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .coverage-item {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+            transition: border-color 0.2s;
+        }
+        
+        .coverage-item:has(input[type="checkbox"]:checked) {
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+        
+        .coverage-details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+        }
+        
+        .coverage-item:has(input[type="checkbox"]:checked) .coverage-details {
+            display: grid;
         }
         
         .notes {
@@ -145,6 +171,48 @@
         .save-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+        
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+        
+        .add-btn {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .add-btn:hover {
+            background: #219a52;
+        }
+        
+        .driver-entry, .vehicle-entry {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+        
+        .driver-entry:first-child, .vehicle-entry:first-child {
+            background: white;
         }
         
         .required {
@@ -219,96 +287,110 @@
         <div class="section">
             <h2 class="section-header">👨‍💼 2. Driver Information</h2>
             <div class="section-content">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Driver Name <span class="required">*</span></label>
-                        <input type="text" placeholder="Full name">
-                    </div>
-                    <div class="form-group">
-                        <label>License State & Number <span class="required">*</span></label>
-                        <input type="text" placeholder="CA - D1234567">
-                    </div>
-                    <div class="form-group">
-                        <label>Date of Hire</label>
-                        <input type="date">
-                    </div>
-                    <div class="form-group">
-                        <label>Years of Experience <span class="required">*</span></label>
-                        <select>
-                            <option value="">Select...</option>
-                            <option value="<1">Less than 1 year</option>
-                            <option value="1-3">1-3 years</option>
-                            <option value="4-7">4-7 years</option>
-                            <option value="8+">8+ years</option>
-                        </select>
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Accidents/Violations (Last 3 Years)</label>
-                        <textarea rows="3" placeholder="Summary or attach loss runs"></textarea>
-                        <div class="notes">Summary or attach loss runs</div>
+                <div id="drivers-container">
+                    <div class="driver-entry" data-driver="1">
+                        <h3 style="color: #3498db; margin-bottom: 15px;">Driver #1</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Driver Name <span class="required">*</span></label>
+                                <input type="text" placeholder="Full name" name="driver_1_name">
+                            </div>
+                            <div class="form-group">
+                                <label>License State & Number <span class="required">*</span></label>
+                                <input type="text" placeholder="CA - D1234567" name="driver_1_license">
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Hire</label>
+                                <input type="date" name="driver_1_hire_date">
+                            </div>
+                            <div class="form-group">
+                                <label>Years of Experience <span class="required">*</span></label>
+                                <select name="driver_1_experience">
+                                    <option value="">Select...</option>
+                                    <option value="<1">Less than 1 year</option>
+                                    <option value="1-3">1-3 years</option>
+                                    <option value="4-7">4-7 years</option>
+                                    <option value="8+">8+ years</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Accidents/Violations (Last 3 Years)</label>
+                                <textarea rows="3" placeholder="Summary or attach loss runs" name="driver_1_violations"></textarea>
+                                <div class="notes">Summary or attach loss runs</div>
+                            </div>
+                        </div>
+                        <button type="button" class="remove-btn" onclick="removeDriver(1)" style="background: #e74c3c; color: white; padding: 8px 15px; border: none; border-radius: 4px; margin-top: 10px; display: none;">Remove Driver #1</button>
                     </div>
                 </div>
+                <button type="button" onclick="addDriver()" class="add-btn">+ Add Another Driver</button>
             </div>
         </div>
         
         <div class="section">
             <h2 class="section-header">🚚 3. Vehicle & Trailer Details</h2>
             <div class="section-content">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Unit #</label>
-                        <input type="text" placeholder="Internal reference number">
-                        <div class="notes">Internal reference</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Year/Make/Model <span class="required">*</span></label>
-                        <input type="text" placeholder="2020 Freightliner Cascadia">
-                    </div>
-                    <div class="form-group">
-                        <label>VIN <span class="required">*</span></label>
-                        <input type="text" placeholder="17-digit VIN">
-                    </div>
-                    <div class="form-group">
-                        <label>GVW/GCW <span class="required">*</span></label>
-                        <select>
-                            <option value=">80,000">More than 80,000 lbs</option>
-                            <option value="60,001-80,000">60,001-80,000 lbs</option>
-                            <option value="40,001-60,000">40,001-60,000 lbs</option>
-                            <option value="26,001-40,000">26,001-40,000 lbs</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Radius of Operation <span class="required">*</span></label>
-                        <select>
-                            <option value="">Select...</option>
-                            <option value="0-100">0-100 miles</option>
-                            <option value="101-300">101-300 miles</option>
-                            <option value="301-500">301-500 miles</option>
-                            <option value="500+">500+ miles</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>ELD Manufacturer</label>
-                        <select>
-                            <option value="">Select...</option>
-                            <option value="KeepTruckin">KeepTruckin</option>
-                            <option value="Samsara">Samsara</option>
-                            <option value="Omnitracs">Omnitracs</option>
-                            <option value="PeopleNet">PeopleNet</option>
-                            <option value="Fleet Complete">Fleet Complete</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Additional Options</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="trailer-interchange">
-                                <label for="trailer-interchange">Trailer Interchange Coverage</label>
+                <div id="vehicles-container">
+                    <div class="vehicle-entry" data-vehicle="1">
+                        <h3 style="color: #3498db; margin-bottom: 15px;">Vehicle #1</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Unit #</label>
+                                <input type="text" placeholder="Internal reference number" name="vehicle_1_unit">
+                                <div class="notes">Internal reference</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Year/Make/Model <span class="required">*</span></label>
+                                <input type="text" placeholder="2020 Freightliner Cascadia" name="vehicle_1_make_model">
+                            </div>
+                            <div class="form-group">
+                                <label>VIN <span class="required">*</span></label>
+                                <input type="text" placeholder="17-digit VIN" name="vehicle_1_vin">
+                            </div>
+                            <div class="form-group">
+                                <label>GVW/GCW <span class="required">*</span></label>
+                                <select name="vehicle_1_gvw">
+                                    <option value=">80,000">More than 80,000 lbs</option>
+                                    <option value="60,001-80,000">60,001-80,000 lbs</option>
+                                    <option value="40,001-60,000">40,001-60,000 lbs</option>
+                                    <option value="26,001-40,000">26,001-40,000 lbs</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Radius of Operation <span class="required">*</span></label>
+                                <select name="vehicle_1_radius">
+                                    <option value="">Select...</option>
+                                    <option value="0-100">0-100 miles</option>
+                                    <option value="101-300">101-300 miles</option>
+                                    <option value="301-500">301-500 miles</option>
+                                    <option value="500+">500+ miles</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>ELD Manufacturer</label>
+                                <select name="vehicle_1_eld">
+                                    <option value="">Select...</option>
+                                    <option value="KeepTruckin">KeepTruckin</option>
+                                    <option value="Samsara">Samsara</option>
+                                    <option value="Omnitracs">Omnitracs</option>
+                                    <option value="PeopleNet">PeopleNet</option>
+                                    <option value="Fleet Complete">Fleet Complete</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Additional Options</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="trailer-interchange-1" name="vehicle_1_trailer_interchange">
+                                        <label for="trailer-interchange-1">Trailer Interchange Coverage</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <button type="button" class="remove-btn" onclick="removeVehicle(1)" style="background: #e74c3c; color: white; padding: 8px 15px; border: none; border-radius: 4px; margin-top: 10px; display: none;">Remove Vehicle #1</button>
                     </div>
                 </div>
+                <button type="button" onclick="addVehicle()" class="add-btn">+ Add Another Vehicle</button>
             </div>
         </div>
         
@@ -401,40 +483,220 @@
         </div>
         
         <div class="section">
-            <h2 class="section-header">🛡️ 6. Coverage Options</h2>
+            <h2 class="section-header">🛡️ 6. Coverage Options & Limits</h2>
             <div class="section-content">
                 <div class="coverage-grid">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="primary-liability">
-                        <label for="primary-liability">Primary Liability</label>
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="primary-liability">
+                            <label for="primary-liability"><strong>Primary Liability</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>Liability Limit</label>
+                                <select name="primary_liability_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$750,000">$750,000</option>
+                                    <option value="$1,000,000">$1,000,000</option>
+                                    <option value="$2,000,000">$2,000,000</option>
+                                    <option value="$5,000,000">$5,000,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="primary_liability_custom">
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="non-trucking">
-                        <label for="non-trucking">Non-Trucking Liability</label>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="non-trucking">
+                            <label for="non-trucking"><strong>Non-Trucking Liability</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>NTL Limit</label>
+                                <select name="ntl_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$1,000,000">$1,000,000</option>
+                                    <option value="$2,000,000">$2,000,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="ntl_custom">
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="physical-damage">
-                        <label for="physical-damage">Physical Damage</label>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="physical-damage">
+                            <label for="physical-damage"><strong>Physical Damage</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>Comprehensive Deductible</label>
+                                <select name="comp_deductible">
+                                    <option value="">Select deductible...</option>
+                                    <option value="$1,000">$1,000</option>
+                                    <option value="$2,500">$2,500</option>
+                                    <option value="$5,000">$5,000</option>
+                                    <option value="$10,000">$10,000</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Collision Deductible</label>
+                                <select name="collision_deductible">
+                                    <option value="">Select deductible...</option>
+                                    <option value="$1,000">$1,000</option>
+                                    <option value="$2,500">$2,500</option>
+                                    <option value="$5,000">$5,000</option>
+                                    <option value="$10,000">$10,000</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cargo-coverage">
-                        <label for="cargo-coverage">Cargo Coverage</label>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="cargo-coverage">
+                            <label for="cargo-coverage"><strong>Cargo Coverage</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>Cargo Limit</label>
+                                <select name="cargo_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$50,000">$50,000</option>
+                                    <option value="$100,000">$100,000</option>
+                                    <option value="$250,000">$250,000</option>
+                                    <option value="$500,000">$500,000</option>
+                                    <option value="$1,000,000">$1,000,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Cargo Deductible</label>
+                                <select name="cargo_deductible">
+                                    <option value="">Select deductible...</option>
+                                    <option value="$1,000">$1,000</option>
+                                    <option value="$2,500">$2,500</option>
+                                    <option value="$5,000">$5,000</option>
+                                    <option value="$10,000">$10,000</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="cargo_custom">
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="general-liability">
-                        <label for="general-liability">General Liability</label>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="general-liability">
+                            <label for="general-liability"><strong>General Liability</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>GL Limit</label>
+                                <select name="gl_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$1,000,000">$1,000,000</option>
+                                    <option value="$2,000,000">$2,000,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="gl_custom">
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="hired-non-owned">
-                        <label for="hired-non-owned">Hired/Non-Owned Auto</label>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hired-non-owned">
+                            <label for="hired-non-owned"><strong>Hired/Non-Owned Auto</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>H/NO Limit</label>
+                                <select name="hno_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$1,000,000">$1,000,000</option>
+                                    <option value="$2,000,000">$2,000,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="hno_custom">
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="trailer-interchange-cov">
-                        <label for="trailer-interchange-cov">Trailer Interchange</label>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="trailer-interchange-cov">
+                            <label for="trailer-interchange-cov"><strong>Trailer Interchange</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>TI Limit</label>
+                                <select name="ti_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$50,000">$50,000</option>
+                                    <option value="$75,000">$75,000</option>
+                                    <option value="$100,000">$100,000</option>
+                                    <option value="$150,000">$150,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>TI Deductible</label>
+                                <select name="ti_deductible">
+                                    <option value="">Select deductible...</option>
+                                    <option value="$1,000">$1,000</option>
+                                    <option value="$2,500">$2,500</option>
+                                    <option value="$5,000">$5,000</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="ti_custom">
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="garagekeepers">
-                        <label for="garagekeepers">Garagekeepers Liability</label>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="garagekeepers">
+                            <label for="garagekeepers"><strong>Garagekeepers Liability</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>GK Limit</label>
+                                <select name="gk_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$50,000">$50,000</option>
+                                    <option value="$100,000">$100,000</option>
+                                    <option value="$250,000">$250,000</option>
+                                    <option value="$500,000">$500,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="gk_custom">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -488,22 +750,163 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <script>
-        function saveQuote() {
-            // Validate required fields
-            const requiredFields = document.querySelectorAll('input:required, select:required');
-            let isValid = true;
+        let driverCount = 1;
+        let vehicleCount = 1;
+        
+        function addDriver() {
+            driverCount++;
+            const container = document.getElementById('drivers-container');
+            const newDriver = document.createElement('div');
+            newDriver.className = 'driver-entry';
+            newDriver.setAttribute('data-driver', driverCount);
             
-            requiredFields.forEach(field => {
-                if (!field.value) {
-                    field.style.borderColor = '#e74c3c';
-                    isValid = false;
-                } else {
-                    field.style.borderColor = '#27ae60';
+            newDriver.innerHTML = `
+                <h3 style="color: #3498db; margin-bottom: 15px;">Driver #${driverCount}</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Driver Name <span class="required">*</span></label>
+                        <input type="text" placeholder="Full name" name="driver_${driverCount}_name">
+                    </div>
+                    <div class="form-group">
+                        <label>License State & Number <span class="required">*</span></label>
+                        <input type="text" placeholder="CA - D1234567" name="driver_${driverCount}_license">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Hire</label>
+                        <input type="date" name="driver_${driverCount}_hire_date">
+                    </div>
+                    <div class="form-group">
+                        <label>Years of Experience <span class="required">*</span></label>
+                        <select name="driver_${driverCount}_experience">
+                            <option value="">Select...</option>
+                            <option value="<1">Less than 1 year</option>
+                            <option value="1-3">1-3 years</option>
+                            <option value="4-7">4-7 years</option>
+                            <option value="8+">8+ years</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Accidents/Violations (Last 3 Years)</label>
+                        <textarea rows="3" placeholder="Summary or attach loss runs" name="driver_${driverCount}_violations"></textarea>
+                        <div class="notes">Summary or attach loss runs</div>
+                    </div>
+                </div>
+                <button type="button" class="remove-btn" onclick="removeDriver(${driverCount})">Remove Driver #${driverCount}</button>
+            `;
+            
+            container.appendChild(newDriver);
+            updateRemoveButtons();
+        }
+        
+        function removeDriver(driverNum) {
+            const driverElement = document.querySelector(`[data-driver="${driverNum}"]`);
+            if (driverElement) {
+                driverElement.remove();
+            }
+            updateRemoveButtons();
+        }
+        
+        function addVehicle() {
+            vehicleCount++;
+            const container = document.getElementById('vehicles-container');
+            const newVehicle = document.createElement('div');
+            newVehicle.className = 'vehicle-entry';
+            newVehicle.setAttribute('data-vehicle', vehicleCount);
+            
+            newVehicle.innerHTML = `
+                <h3 style="color: #3498db; margin-bottom: 15px;">Vehicle #${vehicleCount}</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Unit #</label>
+                        <input type="text" placeholder="Internal reference number" name="vehicle_${vehicleCount}_unit">
+                        <div class="notes">Internal reference</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Year/Make/Model <span class="required">*</span></label>
+                        <input type="text" placeholder="2020 Freightliner Cascadia" name="vehicle_${vehicleCount}_make_model">
+                    </div>
+                    <div class="form-group">
+                        <label>VIN <span class="required">*</span></label>
+                        <input type="text" placeholder="17-digit VIN" name="vehicle_${vehicleCount}_vin">
+                    </div>
+                    <div class="form-group">
+                        <label>GVW/GCW <span class="required">*</span></label>
+                        <select name="vehicle_${vehicleCount}_gvw">
+                            <option value=">80,000">More than 80,000 lbs</option>
+                            <option value="60,001-80,000">60,001-80,000 lbs</option>
+                            <option value="40,001-60,000">40,001-60,000 lbs</option>
+                            <option value="26,001-40,000">26,001-40,000 lbs</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Radius of Operation <span class="required">*</span></label>
+                        <select name="vehicle_${vehicleCount}_radius">
+                            <option value="">Select...</option>
+                            <option value="0-100">0-100 miles</option>
+                            <option value="101-300">101-300 miles</option>
+                            <option value="301-500">301-500 miles</option>
+                            <option value="500+">500+ miles</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ELD Manufacturer</label>
+                        <select name="vehicle_${vehicleCount}_eld">
+                            <option value="">Select...</option>
+                            <option value="KeepTruckin">KeepTruckin</option>
+                            <option value="Samsara">Samsara</option>
+                            <option value="Omnitracs">Omnitracs</option>
+                            <option value="PeopleNet">PeopleNet</option>
+                            <option value="Fleet Complete">Fleet Complete</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Additional Options</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="trailer-interchange-${vehicleCount}" name="vehicle_${vehicleCount}_trailer_interchange">
+                                <label for="trailer-interchange-${vehicleCount}">Trailer Interchange Coverage</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="remove-btn" onclick="removeVehicle(${vehicleCount})">Remove Vehicle #${vehicleCount}</button>
+            `;
+            
+            container.appendChild(newVehicle);
+            updateRemoveButtons();
+        }
+        
+        function removeVehicle(vehicleNum) {
+            const vehicleElement = document.querySelector(`[data-vehicle="${vehicleNum}"]`);
+            if (vehicleElement) {
+                vehicleElement.remove();
+            }
+            updateRemoveButtons();
+        }
+        
+        function updateRemoveButtons() {
+            // Show/hide remove buttons based on count
+            const driverEntries = document.querySelectorAll('.driver-entry');
+            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
+            
+            driverEntries.forEach((entry, index) => {
+                const removeBtn = entry.querySelector('.remove-btn');
+                if (removeBtn) {
+                    removeBtn.style.display = driverEntries.length > 1 ? 'inline-block' : 'none';
                 }
             });
             
-            if (!isValid) {
-                alert('Please fill in all required fields (marked with *)');
+            vehicleEntries.forEach((entry, index) => {
+                const removeBtn = entry.querySelector('.remove-btn');
+                if (removeBtn) {
+                    removeBtn.style.display = vehicleEntries.length > 1 ? 'inline-block' : 'none';
+                }
+            });
+        }
+        function saveQuote() {
+            // Validate all fields including dynamic entries
+            if (!validateAllFields()) {
                 return;
             }
             
@@ -562,36 +965,58 @@
             yPos += 15;
             
             // Driver Information
-            const driverName = document.querySelector('input[placeholder="Full name"]').value || 'N/A';
-            const licenseInfo = document.querySelector('input[placeholder="CA - D1234567"]').value || 'N/A';
-            
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('DRIVER INFORMATION', 20, yPos);
-            yPos += 10;
-            
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Driver Name: ${driverName}`, 20, yPos);
-            yPos += 6;
-            doc.text(`License Info: ${licenseInfo}`, 20, yPos);
-            yPos += 15;
-            
+            const driverEntries = document.querySelectorAll('.driver-entry');
+            if (driverEntries.length > 0) {
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('DRIVER INFORMATION', 20, yPos);
+                yPos += 10;
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'normal');
+                
+                driverEntries.forEach((entry, index) => {
+                    const driverNum = entry.getAttribute('data-driver');
+                    const driverName = entry.querySelector(`input[name="driver_${driverNum}_name"]`).value || 'N/A';
+                    const licenseInfo = entry.querySelector(`input[name="driver_${driverNum}_license"]`).value || 'N/A';
+                    const experience = entry.querySelector(`select[name="driver_${driverNum}_experience"]`).value || 'N/A';
+                    
+                    doc.text(`Driver #${index + 1}: ${driverName}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`License: ${licenseInfo}`, 25, yPos);
+                    yPos += 6;
+                    doc.text(`Experience: ${experience}`, 25, yPos);
+                    yPos += 8;
+                });
+                yPos += 7;
+            }
+
             // Vehicle Information
-            const vehicleInfo = document.querySelector('input[placeholder="2020 Freightliner Cascadia"]').value || 'N/A';
-            const vin = document.querySelector('input[placeholder="17-digit VIN"]').value || 'N/A';
-            
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('VEHICLE & TRAILER DETAILS', 20, yPos);
-            yPos += 10;
-            
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Vehicle: ${vehicleInfo}`, 20, yPos);
-            yPos += 6;
-            doc.text(`VIN: ${vin}`, 20, yPos);
-            yPos += 15;
+            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
+            if (vehicleEntries.length > 0) {
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('VEHICLE & TRAILER DETAILS', 20, yPos);
+                yPos += 10;
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'normal');
+                
+                vehicleEntries.forEach((entry, index) => {
+                    const vehicleNum = entry.getAttribute('data-vehicle');
+                    const vehicleInfo = entry.querySelector(`input[name="vehicle_${vehicleNum}_make_model"]`).value || 'N/A';
+                    const vin = entry.querySelector(`input[name="vehicle_${vehicleNum}_vin"]`).value || 'N/A';
+                    const gvw = entry.querySelector(`select[name="vehicle_${vehicleNum}_gvw"]`).value || 'N/A';
+                    
+                    doc.text(`Vehicle #${index + 1}: ${vehicleInfo}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`VIN: ${vin}`, 25, yPos);
+                    yPos += 6;
+                    doc.text(`GVW: ${gvw}`, 25, yPos);
+                    yPos += 8;
+                });
+                yPos += 7;
+            }
             
             // Coverage Options
             doc.setFontSize(12);
@@ -631,7 +1056,8 @@
                 phone,
                 email,
                 dotNumber,
-                mcNumber
+                mcNumber,
+                agencyNumber
             });
         }
         
@@ -646,12 +1072,13 @@
             const emailData = new FormData();
             
             // FormSubmit specific fields
-            emailData.append('_subject', `New Trucking Quote - ${formData.businessName}`);
+            emailData.append('_subject', `New Trucking Quote - ${formData.businessName} (Agency #${formData.agencyNumber})`);
             emailData.append('_cc', formData.email);
             emailData.append('_captcha', 'false');  // Disable captcha for cleaner UX
             emailData.append('_template', 'table');  // Use table format for better readability
             
             // Quote details
+            emailData.append('Agency_Number', formData.agencyNumber);
             emailData.append('Business_Name', formData.businessName);
             emailData.append('Contact_Name', formData.contactName);
             emailData.append('Phone', formData.phone);
@@ -659,12 +1086,12 @@
             emailData.append('DOT_Number', formData.dotNumber);
             emailData.append('MC_Number', formData.mcNumber);
             
-            // Add all form fields
+            // Add all form fields including multiple drivers and vehicles
             const allInputs = document.querySelectorAll('input, select, textarea');
             allInputs.forEach(input => {
-                if (input.value) {
-                    const fieldName = input.placeholder || input.id || 'field';
-                    const cleanFieldName = fieldName.replace(/[^a-zA-Z0-9]/g, '_');
+                if (input.value && input.name) {
+                    const fieldName = input.name || input.placeholder || input.id || 'field';
+                    const cleanFieldName = fieldName.replace(/[^a-zA-Z0-9_]/g, '_');
                     
                     if (input.type === 'checkbox') {
                         emailData.append(cleanFieldName, input.checked ? 'Yes' : 'No');
@@ -673,6 +1100,32 @@
                     }
                 }
             });
+            
+            // Add driver summary
+            const driverEntries = document.querySelectorAll('.driver-entry');
+            let driverSummary = [];
+            driverEntries.forEach((entry, index) => {
+                const driverNum = entry.getAttribute('data-driver');
+                const driverName = entry.querySelector(`input[name="driver_${driverNum}_name"]`).value;
+                if (driverName) {
+                    driverSummary.push(`Driver ${index + 1}: ${driverName}`);
+                }
+            });
+            emailData.append('Total_Drivers', driverEntries.length);
+            emailData.append('Driver_Summary', driverSummary.join(', ') || 'None');
+            
+            // Add vehicle summary
+            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
+            let vehicleSummary = [];
+            vehicleEntries.forEach((entry, index) => {
+                const vehicleNum = entry.getAttribute('data-vehicle');
+                const vehicleInfo = entry.querySelector(`input[name="vehicle_${vehicleNum}_make_model"]`).value;
+                if (vehicleInfo) {
+                    vehicleSummary.push(`Vehicle ${index + 1}: ${vehicleInfo}`);
+                }
+            });
+            emailData.append('Total_Vehicles', vehicleEntries.length);
+            emailData.append('Vehicle_Summary', vehicleSummary.join(', ') || 'None');
             
             // Add coverage options
             const coverageOptions = [
@@ -747,18 +1200,85 @@
             document.querySelector('input[placeholder="email@company.com"]').required = true;
             document.querySelector('input[placeholder="DOT Number"]').required = true;
             document.querySelector('input[placeholder="MC Number"]').required = true;
+            document.querySelector('input[placeholder="Agency reference number"]').required = true;
+            
+            updateRemoveButtons();
             
             // Real-time validation
-            document.querySelectorAll('input, select').forEach(field => {
-                field.addEventListener('blur', function() {
-                    if (this.required && !this.value) {
-                        this.style.borderColor = '#e74c3c';
-                    } else {
-                        this.style.borderColor = '#27ae60';
-                    }
-                });
+            document.addEventListener('input', function(e) {
+                if (e.target.required && !e.target.value) {
+                    e.target.style.borderColor = '#e74c3c';
+                } else if (e.target.value) {
+                    e.target.style.borderColor = '#27ae60';
+                }
             });
         });
+        
+        function validateAllFields() {
+            let isValid = true;
+            const requiredFields = document.querySelectorAll('input[required], select[required]');
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#27ae60';
+                }
+            });
+            
+            // Validate at least one driver has required info
+            const driverEntries = document.querySelectorAll('.driver-entry');
+            let hasValidDriver = false;
+            driverEntries.forEach(entry => {
+                const driverNum = entry.getAttribute('data-driver');
+                const driverName = entry.querySelector(`input[name="driver_${driverNum}_name"]`);
+                const driverLicense = entry.querySelector(`input[name="driver_${driverNum}_license"]`);
+                const driverExperience = entry.querySelector(`select[name="driver_${driverNum}_experience"]`);
+                
+                if (driverName.value && driverLicense.value && driverExperience.value) {
+                    hasValidDriver = true;
+                } else if (driverName.value || driverLicense.value || driverExperience.value) {
+                    // Partial info - mark required fields
+                    if (!driverName.value) driverName.style.borderColor = '#e74c3c';
+                    if (!driverLicense.value) driverLicense.style.borderColor = '#e74c3c';
+                    if (!driverExperience.value) driverExperience.style.borderColor = '#e74c3c';
+                    isValid = false;
+                }
+            });
+            
+            // Validate at least one vehicle has required info
+            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
+            let hasValidVehicle = false;
+            vehicleEntries.forEach(entry => {
+                const vehicleNum = entry.getAttribute('data-vehicle');
+                const vehicleMake = entry.querySelector(`input[name="vehicle_${vehicleNum}_make_model"]`);
+                const vehicleVin = entry.querySelector(`input[name="vehicle_${vehicleNum}_vin"]`);
+                const vehicleRadius = entry.querySelector(`select[name="vehicle_${vehicleNum}_radius"]`);
+                
+                if (vehicleMake.value && vehicleVin.value && vehicleRadius.value) {
+                    hasValidVehicle = true;
+                } else if (vehicleMake.value || vehicleVin.value || vehicleRadius.value) {
+                    // Partial info - mark required fields
+                    if (!vehicleMake.value) vehicleMake.style.borderColor = '#e74c3c';
+                    if (!vehicleVin.value) vehicleVin.style.borderColor = '#e74c3c';
+                    if (!vehicleRadius.value) vehicleRadius.style.borderColor = '#e74c3c';
+                    isValid = false;
+                }
+            });
+            
+            if (!hasValidDriver) {
+                alert('Please complete at least one driver with all required information.');
+                isValid = false;
+            }
+            
+            if (!hasValidVehicle) {
+                alert('Please complete at least one vehicle with all required information.');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
     </script>
 </body>
 </html>

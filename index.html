@@ -127,12 +127,7 @@
             border-radius: 8px;
             padding: 15px;
             background: #f8f9fa;
-            transition: border-color 0.2s;
-        }
-        
-        .coverage-item:has(input[type="checkbox"]:checked) {
-            border-color: #3498db;
-            background: #f0f8ff;
+            transition: all 0.2s;
         }
         
         .coverage-details {
@@ -142,10 +137,6 @@
             display: none;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-        }
-        
-        .coverage-item:has(input[type="checkbox"]:checked) .coverage-details {
-            display: grid;
         }
         
         .notes {
@@ -211,8 +202,35 @@
             background: #f8f9fa;
         }
         
-        .driver-entry:first-child, .vehicle-entry:first-child {
+        .commodity-entry {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+        
+        .commodity-entry:first-child {
             background: white;
+        }
+        
+        #percentage-total {
+            padding: 10px 15px;
+            background: #f0f8ff;
+            border-radius: 5px;
+            border: 2px solid #e9ecef;
+        }
+        
+        #percentage-total.over-100 {
+            background: #ffe6e6;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        #percentage-total.complete {
+            background: #e8f5e8;
+            border-color: #27ae60;
+            color: #27ae60;
         }
         
         .required {
@@ -223,8 +241,20 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚛 Trucking Insurance Quick Quote Sheet 💼</h1>
-            <p>Enhanced for >80K Heavy-Duty Operations</p>
+            <div style="text-align: center; margin-bottom: 10px;">
+                <h1 style="margin: 0; font-size: 28px; color: white;">Network TruckInsurance Services, Inc.</h1>
+                <div style="font-size: 16px; margin-top: 5px; opacity: 0.9;">
+                    <strong>Ed Zahnle - Agent/Broker</strong>
+                </div>
+                <div style="font-size: 14px; margin-top: 8px; opacity: 0.9;">
+                    📞 PH (509) 215-3433 | 📧 ed.zahnle@truckerinsurance.com
+                </div>
+            </div>
+            <div style="border-top: 2px solid rgba(255,255,255,0.3); padding-top: 15px; margin-top: 15px;">
+                <h2 style="margin: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    🚛 Trucking Insurance Quick Quote 💼
+                </h2>
+            </div>
         </div>
         
         <div class="section">
@@ -397,40 +427,80 @@
         <div class="section">
             <h2 class="section-header">📦 4. Commodities & Cargo</h2>
             <div class="section-content">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Commodity Type <span class="required">*</span></label>
-                        <select>
-                            <option value="">Select...</option>
-                            <option value="General Freight">General Freight</option>
-                            <option value="Auto Hauler">Auto Hauler</option>
-                            <option value="Refrigerated">Refrigerated</option>
-                            <option value="Flatbed">Flatbed</option>
-                            <option value="Hazmat">Hazmat</option>
-                            <option value="Tanker">Tanker</option>
-                            <option value="Heavy Haul">Heavy Haul</option>
-                            <option value="Container">Container</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>% of Loads</label>
-                        <input type="text" placeholder="e.g., 80%">
-                    </div>
-                    <div class="form-group">
-                        <label>Average Cargo Value</label>
-                        <input type="text" placeholder="$50,000">
-                    </div>
-                    <div class="form-group">
-                        <label>Maximum Cargo Value</label>
-                        <input type="text" placeholder="$100,000">
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Special Coverage Needed</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="refrigeration">
-                                <label for="refrigeration">Refrigeration Coverage</label>
+                <div id="commodities-container">
+                    <div class="commodity-entry" data-commodity="1">
+                        <h3 style="color: #3498db; margin-bottom: 15px;">Commodity #1</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Commodity Type <span class="required">*</span></label>
+                                <select name="commodity_1_type">
+                                    <option value="">Select...</option>
+                                    <option value="General Freight">General Freight</option>
+                                    <option value="Auto Hauler">Auto Hauler</option>
+                                    <option value="Refrigerated">Refrigerated</option>
+                                    <option value="Flatbed">Flatbed</option>
+                                    <option value="Hazmat">Hazmat</option>
+                                    <option value="Tanker">Tanker</option>
+                                    <option value="Heavy Haul">Heavy Haul</option>
+                                    <option value="Container">Container</option>
+                                    <option value="Dry Van">Dry Van</option>
+                                    <option value="Step Deck">Step Deck</option>
+                                    <option value="Lowboy">Lowboy</option>
+                                    <option value="Livestock">Livestock</option>
+                                    <option value="Grain/Agriculture">Grain/Agriculture</option>
+                                    <option value="Construction Materials">Construction Materials</option>
+                                    <option value="Food Grade">Food Grade</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
                             </div>
+                            <div class="form-group">
+                                <label>% of Total Loads <span class="required">*</span></label>
+                                <input type="number" placeholder="e.g., 60" min="1" max="100" name="commodity_1_percentage">
+                                <div class="notes">Percentage of total loads</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Average Cargo Value</label>
+                                <input type="text" placeholder="$50,000" name="commodity_1_avg_value">
+                            </div>
+                            <div class="form-group">
+                                <label>Maximum Cargo Value</label>
+                                <input type="text" placeholder="$100,000" name="commodity_1_max_value">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Custom Commodity (if other)</label>
+                                <input type="text" placeholder="Specify if 'Other' selected above" name="commodity_1_custom">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Additional Notes</label>
+                                <textarea rows="2" placeholder="Special handling, equipment requirements, etc." name="commodity_1_notes"></textarea>
+                            </div>
+                        </div>
+                        <button type="button" class="remove-btn" onclick="removeCommodity(1)" style="display: none;">Remove Commodity #1</button>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                    <button type="button" onclick="addCommodity()" class="add-btn">+ Add Another Commodity</button>
+                    <div id="percentage-total" style="font-weight: bold; color: #3498db; font-size: 16px;">Total: 0%</div>
+                </div>
+                
+                <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #e9ecef;">
+                    <h4 style="color: #2c3e50; margin-bottom: 15px;">Special Coverage Requirements</h4>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="refrigeration" name="special_refrigeration">
+                            <label for="refrigeration">Refrigeration Coverage</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hazmat-coverage" name="special_hazmat">
+                            <label for="hazmat-coverage">Hazmat Endorsement</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="livestock-coverage" name="special_livestock">
+                            <label for="livestock-coverage">Livestock Coverage</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="high-value" name="special_high_value">
+                            <label for="high-value">High-Value Cargo Coverage</label>
                         </div>
                     </div>
                 </div>
@@ -600,22 +670,64 @@
 
                     <div class="coverage-item">
                         <div class="checkbox-item">
+                            <input type="checkbox" id="refrigerated-breakdown">
+                            <label for="refrigerated-breakdown"><strong>Refrigerated Breakdown</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>Breakdown Limit</label>
+                                <select name="refrig_breakdown_limit">
+                                    <option value="">Select limit...</option>
+                                    <option value="$25,000">$25,000</option>
+                                    <option value="$50,000">$50,000</option>
+                                    <option value="$75,000">$75,000</option>
+                                    <option value="$100,000">$100,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Breakdown Deductible</label>
+                                <select name="refrig_breakdown_deductible">
+                                    <option value="$2,500" selected>$2,500 (Standard)</option>
+                                    <option value="$1,000">$1,000</option>
+                                    <option value="$5,000">$5,000</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="refrig_breakdown_custom">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
                             <input type="checkbox" id="general-liability">
                             <label for="general-liability"><strong>General Liability</strong></label>
                         </div>
                         <div class="coverage-details">
                             <div class="form-group">
-                                <label>GL Limit</label>
-                                <select name="gl_limit">
-                                    <option value="">Select limit...</option>
-                                    <option value="$1,000,000">$1,000,000</option>
+                                <label>Per Occurrence Limit</label>
+                                <select name="gl_per_occurrence">
+                                    <option value="$1,000,000" selected>$1,000,000 (Standard)</option>
                                     <option value="$2,000,000">$2,000,000</option>
+                                    <option value="$500,000">$500,000</option>
                                     <option value="Other">Other (specify below)</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Custom Limit (if other)</label>
-                                <input type="text" placeholder="$____" name="gl_custom">
+                                <label>Aggregate Limit</label>
+                                <select name="gl_aggregate">
+                                    <option value="$2,000,000" selected>$2,000,000 (Standard)</option>
+                                    <option value="$3,000,000">$3,000,000</option>
+                                    <option value="$1,000,000">$1,000,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limits (if other)</label>
+                                <input type="text" placeholder="Per Occ / Aggregate" name="gl_custom">
                             </div>
                         </div>
                     </div>
@@ -752,6 +864,7 @@
     <script>
         let driverCount = 1;
         let vehicleCount = 1;
+        let commodityCount = 1;
         
         function addDriver() {
             driverCount++;
@@ -802,6 +915,37 @@
             const driverElement = document.querySelector(`[data-driver="${driverNum}"]`);
             if (driverElement) {
                 driverElement.remove();
+            }
+
+            // Commodities Information
+            const commodityEntries = document.querySelectorAll('.commodity-entry');
+            if (commodityEntries.length > 0) {
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('COMMODITIES & CARGO', 20, yPos);
+                yPos += 10;
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'normal');
+                
+                commodityEntries.forEach((entry, index) => {
+                    const commodityNum = entry.getAttribute('data-commodity');
+                    const commodityType = entry.querySelector(`select[name="commodity_${commodityNum}_type"]`).value || 'N/A';
+                    const percentage = entry.querySelector(`input[name="commodity_${commodityNum}_percentage"]`).value || 'N/A';
+                    const avgValue = entry.querySelector(`input[name="commodity_${commodityNum}_avg_value"]`).value || 'N/A';
+                    const customType = entry.querySelector(`input[name="commodity_${commodityNum}_custom"]`).value;
+                    
+                    const displayType = commodityType === 'Other' && customType ? customType : commodityType;
+                    
+                    doc.text(`Commodity #${index + 1}: ${displayType} (${percentage}%)`, 20, yPos);
+                    yPos += 6;
+                    if (avgValue !== 'N/A') {
+                        doc.text(`Average Value: ${avgValue}`, 25, yPos);
+                        yPos += 6;
+                    }
+                    yPos += 2;
+                });
+                yPos += 7;
             }
             updateRemoveButtons();
         }
@@ -885,10 +1029,102 @@
             updateRemoveButtons();
         }
         
+        function addCommodity() {
+            commodityCount++;
+            const container = document.getElementById('commodities-container');
+            const newCommodity = document.createElement('div');
+            newCommodity.className = 'commodity-entry';
+            newCommodity.setAttribute('data-commodity', commodityCount);
+            
+            newCommodity.innerHTML = `
+                <h3 style="color: #3498db; margin-bottom: 15px;">Commodity #${commodityCount}</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Commodity Type <span class="required">*</span></label>
+                        <select name="commodity_${commodityCount}_type">
+                            <option value="">Select...</option>
+                            <option value="General Freight">General Freight</option>
+                            <option value="Auto Hauler">Auto Hauler</option>
+                            <option value="Refrigerated">Refrigerated</option>
+                            <option value="Flatbed">Flatbed</option>
+                            <option value="Hazmat">Hazmat</option>
+                            <option value="Tanker">Tanker</option>
+                            <option value="Heavy Haul">Heavy Haul</option>
+                            <option value="Container">Container</option>
+                            <option value="Dry Van">Dry Van</option>
+                            <option value="Step Deck">Step Deck</option>
+                            <option value="Lowboy">Lowboy</option>
+                            <option value="Livestock">Livestock</option>
+                            <option value="Grain/Agriculture">Grain/Agriculture</option>
+                            <option value="Construction Materials">Construction Materials</option>
+                            <option value="Food Grade">Food Grade</option>
+                            <option value="Other">Other (specify below)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>% of Total Loads <span class="required">*</span></label>
+                        <input type="number" placeholder="e.g., 25" min="1" max="100" name="commodity_${commodityCount}_percentage">
+                        <div class="notes">Percentage of total loads</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Average Cargo Value</label>
+                        <input type="text" placeholder="$50,000" name="commodity_${commodityCount}_avg_value">
+                    </div>
+                    <div class="form-group">
+                        <label>Maximum Cargo Value</label>
+                        <input type="text" placeholder="$100,000" name="commodity_${commodityCount}_max_value">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Custom Commodity (if other)</label>
+                        <input type="text" placeholder="Specify if 'Other' selected above" name="commodity_${commodityCount}_custom">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Additional Notes</label>
+                        <textarea rows="2" placeholder="Special handling, equipment requirements, etc." name="commodity_${commodityCount}_notes"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="remove-btn" onclick="removeCommodity(${commodityCount})">Remove Commodity #${commodityCount}</button>
+            `;
+            
+            container.appendChild(newCommodity);
+            updateRemoveButtons();
+        }
+        
+        function removeCommodity(commodityNum) {
+            const commodityElement = document.querySelector(`[data-commodity="${commodityNum}"]`);
+            if (commodityElement) {
+                commodityElement.remove();
+            }
+            updateRemoveButtons();
+            updatePercentageTotal();
+        }
+        
+        function updatePercentageTotal() {
+            const percentageInputs = document.querySelectorAll('input[name*="commodity_"][name*="_percentage"]');
+            let total = 0;
+            
+            percentageInputs.forEach(input => {
+                const value = parseInt(input.value) || 0;
+                total += value;
+            });
+            
+            const totalDisplay = document.getElementById('percentage-total');
+            totalDisplay.textContent = `Total: ${total}%`;
+            
+            // Update styling based on total
+            totalDisplay.classList.remove('over-100', 'complete');
+            if (total > 100) {
+                totalDisplay.classList.add('over-100');
+            } else if (total === 100) {
+                totalDisplay.classList.add('complete');
+            }
+        }
+        
         function updateRemoveButtons() {
             // Show/hide remove buttons based on count
             const driverEntries = document.querySelectorAll('.driver-entry');
             const vehicleEntries = document.querySelectorAll('.vehicle-entry');
+            const commodityEntries = document.querySelectorAll('.commodity-entry');
             
             driverEntries.forEach((entry, index) => {
                 const removeBtn = entry.querySelector('.remove-btn');
@@ -901,6 +1137,13 @@
                 const removeBtn = entry.querySelector('.remove-btn');
                 if (removeBtn) {
                     removeBtn.style.display = vehicleEntries.length > 1 ? 'inline-block' : 'none';
+                }
+            });
+            
+            commodityEntries.forEach((entry, index) => {
+                const removeBtn = entry.querySelector('.remove-btn');
+                if (removeBtn) {
+                    removeBtn.style.display = commodityEntries.length > 1 ? 'inline-block' : 'none';
                 }
             });
         }
@@ -937,7 +1180,12 @@
             doc.text(`Generated: ${new Date().toLocaleDateString()}`, 150, 20);
             doc.text(`Agency #: ${agencyNumber}`, 150, 26);
             
-            let yPos = 40;
+            // Add fleet summary
+            const driverCount = document.querySelectorAll('.driver-entry').length;
+            const vehicleCount = document.querySelectorAll('.vehicle-entry').length;
+            doc.text(`Fleet: ${vehicleCount} Vehicle${vehicleCount !== 1 ? 's' : ''}, ${driverCount} Driver${driverCount !== 1 ? 's' : ''}`, 150, 32);
+            
+            let yPos = 45;
             
             // Business Information Section
             doc.setFontSize(12);
@@ -1018,33 +1266,74 @@
                 yPos += 7;
             }
             
-            // Coverage Options
+            // Coverage Options with Limits
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            doc.text('REQUESTED COVERAGE OPTIONS', 20, yPos);
+            doc.text('REQUESTED COVERAGE OPTIONS & LIMITS', 20, yPos);
             yPos += 10;
             
             doc.setFontSize(10);
             doc.setFont(undefined, 'normal');
             
             const coverageOptions = [
-                {id: 'primary-liability', label: 'Primary Liability'},
-                {id: 'non-trucking', label: 'Non-Trucking Liability'},
-                {id: 'physical-damage', label: 'Physical Damage'},
-                {id: 'cargo-coverage', label: 'Cargo Coverage'},
-                {id: 'general-liability', label: 'General Liability'},
-                {id: 'hired-non-owned', label: 'Hired/Non-Owned Auto'},
-                {id: 'trailer-interchange-cov', label: 'Trailer Interchange'},
-                {id: 'garagekeepers', label: 'Garagekeepers Liability'}
+                {id: 'primary-liability', label: 'Primary Liability', limitField: 'primary_liability_limit', customField: 'primary_liability_custom'},
+                {id: 'non-trucking', label: 'Non-Trucking Liability', limitField: 'ntl_limit', customField: 'ntl_custom'},
+                {id: 'physical-damage', label: 'Physical Damage', deductibles: ['comp_deductible', 'collision_deductible']},
+                {id: 'cargo-coverage', label: 'Cargo Coverage', limitField: 'cargo_limit', deductibleField: 'cargo_deductible', customField: 'cargo_custom'},
+                {id: 'general-liability', label: 'General Liability', limitField: 'gl_limit', customField: 'gl_custom'},
+                {id: 'hired-non-owned', label: 'Hired/Non-Owned Auto', limitField: 'hno_limit', customField: 'hno_custom'},
+                {id: 'trailer-interchange-cov', label: 'Trailer Interchange', limitField: 'ti_limit', deductibleField: 'ti_deductible', customField: 'ti_custom'},
+                {id: 'garagekeepers', label: 'Garagekeepers Liability', limitField: 'gk_limit', customField: 'gk_custom'}
             ];
             
+            let hasSelectedCoverage = false;
             coverageOptions.forEach(option => {
                 const checkbox = document.getElementById(option.id);
                 if (checkbox && checkbox.checked) {
-                    doc.text(`✓ ${option.label}`, 20, yPos);
+                    hasSelectedCoverage = true;
+                    let coverageText = `✓ ${option.label}`;
+                    
+                    // Add limit information
+                    if (option.limitField) {
+                        const limitSelect = document.querySelector(`select[name="${option.limitField}"]`);
+                        const customInput = option.customField ? document.querySelector(`input[name="${option.customField}"]`) : null;
+                        
+                        if (limitSelect && limitSelect.value) {
+                            if (limitSelect.value === 'Other' && customInput && customInput.value) {
+                                coverageText += ` - Limit: ${customInput.value}`;
+                            } else if (limitSelect.value !== 'Other') {
+                                coverageText += ` - Limit: ${limitSelect.value}`;
+                            }
+                        }
+                    }
+                    
+                    // Add deductible information
+                    if (option.deductibleField) {
+                        const deductibleSelect = document.querySelector(`select[name="${option.deductibleField}"]`);
+                        if (deductibleSelect && deductibleSelect.value) {
+                            coverageText += ` - Deductible: ${deductibleSelect.value}`;
+                        }
+                    }
+                    
+                    // Handle Physical Damage special case with multiple deductibles
+                    if (option.deductibles) {
+                        const compDed = document.querySelector(`select[name="${option.deductibles[0]}"]`);
+                        const collDed = document.querySelector(`select[name="${option.deductibles[1]}"]`);
+                        let dedText = [];
+                        if (compDed && compDed.value) dedText.push(`Comp: ${compDed.value}`);
+                        if (collDed && collDed.value) dedText.push(`Collision: ${collDed.value}`);
+                        if (dedText.length > 0) coverageText += ` - ${dedText.join(', ')}`;
+                    }
+                    
+                    doc.text(coverageText, 20, yPos);
                     yPos += 6;
                 }
             });
+            
+            if (!hasSelectedCoverage) {
+                doc.text('No coverage options selected', 20, yPos);
+                yPos += 6;
+            }
             
             // Convert PDF to base64
             const pdfBase64 = doc.output('datauristring').split(',')[1];
@@ -1072,7 +1361,11 @@
             const emailData = new FormData();
             
             // FormSubmit specific fields
-            emailData.append('_subject', `New Trucking Quote - ${formData.businessName} (Agency #${formData.agencyNumber})`);
+            const driverCount = document.querySelectorAll('.driver-entry').length;
+            const vehicleCount = document.querySelectorAll('.vehicle-entry').length;
+            const fleetInfo = `${vehicleCount}V/${driverCount}D`;
+            
+            emailData.append('_subject', `New Trucking Quote - ${formData.businessName} (${fleetInfo}) - Agency #${formData.agencyNumber}`);
             emailData.append('_cc', formData.email);
             emailData.append('_captcha', 'false');  // Disable captcha for cleaner UX
             emailData.append('_template', 'table');  // Use table format for better readability
@@ -1127,28 +1420,110 @@
             emailData.append('Total_Vehicles', vehicleEntries.length);
             emailData.append('Vehicle_Summary', vehicleSummary.join(', ') || 'None');
             
-            // Add coverage options
+            // Add commodity summary
+            const commodityEntries = document.querySelectorAll('.commodity-entry');
+            let commoditySummary = [];
+            let totalPercentage = 0;
+            
+            commodityEntries.forEach((entry, index) => {
+                const commodityNum = entry.getAttribute('data-commodity');
+                const commodityType = entry.querySelector(`select[name="commodity_${commodityNum}_type"]`).value;
+                const percentage = parseInt(entry.querySelector(`input[name="commodity_${commodityNum}_percentage"]`).value) || 0;
+                const customType = entry.querySelector(`input[name="commodity_${commodityNum}_custom"]`).value;
+                
+                if (commodityType) {
+                    const displayType = commodityType === 'Other' && customType ? customType : commodityType;
+                    commoditySummary.push(`${displayType}: ${percentage}%`);
+                    totalPercentage += percentage;
+                }
+            });
+            
+            emailData.append('Total_Commodities', commodityEntries.length);
+            emailData.append('Commodity_Summary', commoditySummary.join(' | ') || 'None specified');
+            emailData.append('Total_Percentage', `${totalPercentage}%`);
+            
+            // Add coverage options with limits
             const coverageOptions = [
-                {id: 'primary-liability', label: 'Primary_Liability'},
-                {id: 'non-trucking', label: 'Non_Trucking_Liability'},
-                {id: 'physical-damage', label: 'Physical_Damage'},
-                {id: 'cargo-coverage', label: 'Cargo_Coverage'},
-                {id: 'general-liability', label: 'General_Liability'},
-                {id: 'hired-non-owned', label: 'Hired_Non_Owned_Auto'},
-                {id: 'trailer-interchange-cov', label: 'Trailer_Interchange'},
-                {id: 'garagekeepers', label: 'Garagekeepers_Liability'}
+                {id: 'primary-liability', label: 'Primary_Liability', limitField: 'primary_liability_limit', customField: 'primary_liability_custom'},
+                {id: 'non-trucking', label: 'Non_Trucking_Liability', limitField: 'ntl_limit', customField: 'ntl_custom'},
+                {id: 'physical-damage', label: 'Physical_Damage', deductibles: ['comp_deductible', 'collision_deductible']},
+                {id: 'cargo-coverage', label: 'Cargo_Coverage', limitField: 'cargo_limit', deductibleField: 'cargo_deductible', customField: 'cargo_custom'},
+                {id: 'refrigerated-breakdown', label: 'Refrigerated_Breakdown', limitField: 'refrig_breakdown_limit', deductibleField: 'refrig_breakdown_deductible', customField: 'refrig_breakdown_custom'},
+                {id: 'general-liability', label: 'General_Liability', perOccField: 'gl_per_occurrence', aggregateField: 'gl_aggregate', customField: 'gl_custom'},
+                {id: 'hired-non-owned', label: 'Hired_Non_Owned_Auto', limitField: 'hno_limit', customField: 'hno_custom'},
+                {id: 'trailer-interchange-cov', label: 'Trailer_Interchange', limitField: 'ti_limit', deductibleField: 'ti_deductible', customField: 'ti_custom'},
+                {id: 'garagekeepers', label: 'Garagekeepers_Liability', limitField: 'gk_limit', customField: 'gk_custom'}
             ];
             
             let selectedCoverage = [];
+            let coverageDetails = [];
+            
             coverageOptions.forEach(option => {
                 const checkbox = document.getElementById(option.id);
                 if (checkbox && checkbox.checked) {
                     selectedCoverage.push(option.label.replace('_', ' '));
                     emailData.append(option.label, 'Selected');
+                    
+                    // Handle General Liability special case with per occurrence and aggregate
+                    if (option.perOccField && option.aggregateField) {
+                        const perOccSelect = document.querySelector(`select[name="${option.perOccField}"]`);
+                        const aggregateSelect = document.querySelector(`select[name="${option.aggregateField}"]`);
+                        const customInput = option.customField ? document.querySelector(`input[name="${option.customField}"]`) : null;
+                        
+                        if (perOccSelect && perOccSelect.value) {
+                            emailData.append(`${option.label}_Per_Occurrence`, perOccSelect.value);
+                        }
+                        if (aggregateSelect && aggregateSelect.value) {
+                            emailData.append(`${option.label}_Aggregate`, aggregateSelect.value);
+                        }
+                        if (customInput && customInput.value) {
+                            emailData.append(`${option.label}_Custom`, customInput.value);
+                        }
+                        
+                        if (perOccSelect && perOccSelect.value && aggregateSelect && aggregateSelect.value) {
+                            if (perOccSelect.value === 'Other' && customInput && customInput.value) {
+                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${customInput.value}`);
+                            } else {
+                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${perOccSelect.value} Per Occ / ${aggregateSelect.value} Agg`);
+                            }
+                        }
+                    }
+                    // Add limit information for other coverages
+                    else if (option.limitField) {
+                        const limitSelect = document.querySelector(`select[name="${option.limitField}"]`);
+                        const customInput = option.customField ? document.querySelector(`input[name="${option.customField}"]`) : null;
+                        
+                        if (limitSelect && limitSelect.value) {
+                            emailData.append(`${option.label}_Limit`, limitSelect.value);
+                            if (limitSelect.value === 'Other' && customInput && customInput.value) {
+                                emailData.append(`${option.label}_Custom_Limit`, customInput.value);
+                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${customInput.value}`);
+                            } else if (limitSelect.value !== 'Other') {
+                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${limitSelect.value}`);
+                            }
+                        }
+                    }
+                    
+                    // Add deductible information
+                    if (option.deductibleField) {
+                        const deductibleSelect = document.querySelector(`select[name="${option.deductibleField}"]`);
+                        if (deductibleSelect && deductibleSelect.value) {
+                            emailData.append(`${option.label}_Deductible`, deductibleSelect.value);
+                        }
+                    }
+                    
+                    // Handle Physical Damage special case
+                    if (option.deductibles) {
+                        const compDed = document.querySelector(`select[name="${option.deductibles[0]}"]`);
+                        const collDed = document.querySelector(`select[name="${option.deductibles[1]}"]`);
+                        if (compDed && compDed.value) emailData.append('Comprehensive_Deductible', compDed.value);
+                        if (collDed && collDed.value) emailData.append('Collision_Deductible', collDed.value);
+                    }
                 }
             });
             
             emailData.append('Selected_Coverage_Summary', selectedCoverage.join(', ') || 'None selected');
+            emailData.append('Coverage_Details_Summary', coverageDetails.join(' | ') || 'No limits specified');
             emailData.append('Quote_Date', new Date().toLocaleDateString());
             emailData.append('Quote_Time', new Date().toLocaleTimeString());
             
@@ -1203,6 +1578,8 @@
             document.querySelector('input[placeholder="Agency reference number"]').required = true;
             
             updateRemoveButtons();
+            setupCoverageToggles();
+            setupPercentageCalculation();
             
             // Real-time validation
             document.addEventListener('input', function(e) {
@@ -1213,6 +1590,42 @@
                 }
             });
         });
+        
+        function setupPercentageCalculation() {
+            // Setup percentage calculation for existing and new inputs
+            document.addEventListener('input', function(e) {
+                if (e.target.name && e.target.name.includes('commodity_') && e.target.name.includes('_percentage')) {
+                    updatePercentageTotal();
+                }
+            });
+            updatePercentageTotal();
+        }
+        
+        function setupCoverageToggles() {
+            // Setup coverage detail visibility
+            const coverageCheckboxes = document.querySelectorAll('.coverage-item input[type="checkbox"]');
+            
+            coverageCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const coverageItem = this.closest('.coverage-item');
+                    const coverageDetails = coverageItem.querySelector('.coverage-details');
+                    
+                    if (this.checked) {
+                        coverageDetails.style.display = 'grid';
+                        coverageItem.style.borderColor = '#3498db';
+                        coverageItem.style.background = '#f0f8ff';
+                    } else {
+                        coverageDetails.style.display = 'none';
+                        coverageItem.style.borderColor = '#e9ecef';
+                        coverageItem.style.background = '#f8f9fa';
+                        
+                        // Clear values when unchecked
+                        const inputs = coverageDetails.querySelectorAll('input, select');
+                        inputs.forEach(input => input.value = '');
+                    }
+                });
+            });
+        }
         
         function validateAllFields() {
             let isValid = true;
@@ -1274,6 +1687,39 @@
             
             if (!hasValidVehicle) {
                 alert('Please complete at least one vehicle with all required information.');
+                isValid = false;
+            }
+            
+            // Validate at least one commodity has required info
+            const commodityEntries = document.querySelectorAll('.commodity-entry');
+            let hasValidCommodity = false;
+            let totalPercentage = 0;
+            
+            commodityEntries.forEach(entry => {
+                const commodityNum = entry.getAttribute('data-commodity');
+                const commodityType = entry.querySelector(`select[name="commodity_${commodityNum}_type"]`);
+                const commodityPercentage = entry.querySelector(`input[name="commodity_${commodityNum}_percentage"]`);
+                
+                const percentage = parseInt(commodityPercentage.value) || 0;
+                totalPercentage += percentage;
+                
+                if (commodityType.value && commodityPercentage.value) {
+                    hasValidCommodity = true;
+                } else if (commodityType.value || commodityPercentage.value) {
+                    // Partial info - mark required fields
+                    if (!commodityType.value) commodityType.style.borderColor = '#e74c3c';
+                    if (!commodityPercentage.value) commodityPercentage.style.borderColor = '#e74c3c';
+                    isValid = false;
+                }
+            });
+            
+            if (!hasValidCommodity) {
+                alert('Please complete at least one commodity with type and percentage.');
+                isValid = false;
+            }
+            
+            if (totalPercentage > 100) {
+                alert(`Total commodity percentages cannot exceed 100%. Current total: ${totalPercentage}%`);
                 isValid = false;
             }
             

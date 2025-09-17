@@ -278,6 +278,32 @@
                         <label>Email Address <span class="required">*</span></label>
                         <input type="email" placeholder="email@company.com">
                     </div>
+                    <div class="form-group full-width">
+                        <label>Business Address <span class="required">*</span></label>
+                        <input type="text" placeholder="Street Address" name="business_address" style="margin-bottom: 8px;">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
+                            <input type="text" placeholder="City" name="business_city">
+                            <input type="text" placeholder="State" name="business_state">
+                            <input type="text" placeholder="ZIP Code" name="business_zip">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <div class="checkbox-group" style="margin-bottom: 10px;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="same-garage-address" onchange="toggleGarageAddress()">
+                                <label for="same-garage-address">Garage address same as business address</label>
+                            </div>
+                        </div>
+                        <div id="garage-address-section">
+                            <label>Garage Address (where vehicles are kept) <span class="required">*</span></label>
+                            <input type="text" placeholder="Street Address" name="garage_address" style="margin-bottom: 8px;">
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
+                                <input type="text" placeholder="City" name="garage_city">
+                                <input type="text" placeholder="State" name="garage_state">
+                                <input type="text" placeholder="ZIP Code" name="garage_zip">
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label>USDOT# <span class="required">*</span></label>
                         <input type="text" placeholder="DOT Number">
@@ -1376,6 +1402,8 @@
             emailData.append('Contact_Name', formData.contactName);
             emailData.append('Phone', formData.phone);
             emailData.append('Email', formData.email);
+            emailData.append('Business_Address', `${formData.businessAddress}, ${formData.businessCity}, ${formData.businessState} ${formData.businessZip}`);
+            emailData.append('Garage_Address', formData.sameAddress ? 'Same as business address' : `${formData.garageAddress}, ${formData.garageCity}, ${formData.garageState} ${formData.garageZip}`);
             emailData.append('DOT_Number', formData.dotNumber);
             emailData.append('MC_Number', formData.mcNumber);
             
@@ -1573,6 +1601,14 @@
             document.querySelector('input[placeholder="Primary contact"]').required = true;
             document.querySelector('input[placeholder="(000) 000-0000"]').required = true;
             document.querySelector('input[placeholder="email@company.com"]').required = true;
+            document.querySelector('input[name="business_address"]').required = true;
+            document.querySelector('input[name="business_city"]').required = true;
+            document.querySelector('input[name="business_state"]').required = true;
+            document.querySelector('input[name="business_zip"]').required = true;
+            document.querySelector('input[name="garage_address"]').required = true;
+            document.querySelector('input[name="garage_city"]').required = true;
+            document.querySelector('input[name="garage_state"]').required = true;
+            document.querySelector('input[name="garage_zip"]').required = true;
             document.querySelector('input[placeholder="DOT Number"]').required = true;
             document.querySelector('input[placeholder="MC Number"]').required = true;
             document.querySelector('input[placeholder="Agency reference number"]').required = true;
@@ -1580,6 +1616,7 @@
             updateRemoveButtons();
             setupCoverageToggles();
             setupPercentageCalculation();
+            setupAddressHandling();
             
             // Real-time validation
             document.addEventListener('input', function(e) {
@@ -1590,6 +1627,52 @@
                 }
             });
         });
+        
+        function toggleGarageAddress() {
+            const checkbox = document.getElementById('same-garage-address');
+            const garageSection = document.getElementById('garage-address-section');
+            
+            if (checkbox.checked) {
+                // Hide garage address section and copy business address
+                garageSection.style.display = 'none';
+                
+                // Copy business address to garage address fields
+                const businessAddress = document.querySelector('input[name="business_address"]').value;
+                const businessCity = document.querySelector('input[name="business_city"]').value;
+                const businessState = document.querySelector('input[name="business_state"]').value;
+                const businessZip = document.querySelector('input[name="business_zip"]').value;
+                
+                document.querySelector('input[name="garage_address"]').value = businessAddress;
+                document.querySelector('input[name="garage_city"]').value = businessCity;
+                document.querySelector('input[name="garage_state"]').value = businessState;
+                document.querySelector('input[name="garage_zip"]').value = businessZip;
+            } else {
+                // Show garage address section
+                garageSection.style.display = 'block';
+            }
+        }
+        
+        function setupAddressHandling() {
+            // Setup auto-copy of business address when business address fields change
+            const businessAddressFields = ['business_address', 'business_city', 'business_state', 'business_zip'];
+            
+            businessAddressFields.forEach(fieldName => {
+                const field = document.querySelector(`input[name="${fieldName}"]`);
+                if (field) {
+                    field.addEventListener('input', function() {
+                        const checkbox = document.getElementById('same-garage-address');
+                        if (checkbox.checked) {
+                            // Auto-update garage address if same address is checked
+                            const garageFieldName = fieldName.replace('business_', 'garage_');
+                            const garageField = document.querySelector(`input[name="${garageFieldName}"]`);
+                            if (garageField) {
+                                garageField.value = this.value;
+                            }
+                        }
+                    });
+                }
+            });
+        }
         
         function setupPercentageCalculation() {
             // Setup percentage calculation for existing and new inputs

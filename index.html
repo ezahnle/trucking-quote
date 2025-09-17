@@ -258,7 +258,7 @@
         </div>
         
         <div class="section">
-            <h2 class="section-header">📋 1. Business & Regulatory Information</h2>
+            <h2 class="section-header">📋 1. Business Information</h2>
             <div class="section-content">
                 <div class="form-grid">
                     <div class="form-group">
@@ -350,6 +350,10 @@
                             <div class="form-group">
                                 <label>Driver Name <span class="required">*</span></label>
                                 <input type="text" placeholder="Full name" name="driver_1_name">
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Birth <span class="required">*</span></label>
+                                <input type="date" name="driver_1_birth_date">
                             </div>
                             <div class="form-group">
                                 <label>License State & Number <span class="required">*</span></label>
@@ -451,7 +455,7 @@
         </div>
         
         <div class="section">
-            <h2 class="section-header">📦 4. Commodities & Cargo</h2>
+            <h2 class="section-header">📦 5. Commodities & Cargo</h2>
             <div class="section-content">
                 <div id="commodities-container">
                     <div class="commodity-entry" data-commodity="1">
@@ -534,7 +538,7 @@
         </div>
         
         <div class="section">
-            <h2 class="section-header">📊 5. Insurance History</h2>
+            <h2 class="section-header">📊 6. Insurance History</h2>
             <div class="section-content">
                 <div class="form-grid">
                     <div class="form-group">
@@ -579,18 +583,49 @@
         </div>
         
         <div class="section">
-            <h2 class="section-header">🛡️ 6. Coverage Options & Limits</h2>
+            <h2 class="section-header">🛡️ 7. Coverage Options & Limits</h2>
             <div class="section-content">
                 <div class="coverage-grid">
                     <div class="coverage-item">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="primary-liability">
-                            <label for="primary-liability"><strong>Primary Liability</strong></label>
+                            <input type="checkbox" id="general-liability">
+                            <label for="general-liability"><strong>1. General Liability</strong></label>
+                        </div>
+                        <div class="coverage-details">
+                            <div class="form-group">
+                                <label>Per Occurrence Limit</label>
+                                <select name="gl_per_occurrence">
+                                    <option value="$1,000,000" selected>$1,000,000 (Standard)</option>
+                                    <option value="$2,000,000">$2,000,000</option>
+                                    <option value="$500,000">$500,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Aggregate Limit</label>
+                                <select name="gl_aggregate">
+                                    <option value="$2,000,000" selected>$2,000,000 (Standard)</option>
+                                    <option value="$3,000,000">$3,000,000</option>
+                                    <option value="$1,000,000">$1,000,000</option>
+                                    <option value="Other">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Limits (if other)</label>
+                                <input type="text" placeholder="Per Occ / Aggregate" name="gl_custom">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="coverage-item">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="auto-liability">
+                            <label for="auto-liability"><strong>2. Auto Liability</strong></label>
                         </div>
                         <div class="coverage-details">
                             <div class="form-group">
                                 <label>Liability Limit</label>
-                                <select name="primary_liability_limit">
+                                <select name="auto_liability_limit">
                                     <option value="">Select limit...</option>
                                     <option value="$750,000">$750,000</option>
                                     <option value="$1,000,000">$1,000,000</option>
@@ -601,29 +636,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Custom Limit (if other)</label>
-                                <input type="text" placeholder="$____" name="primary_liability_custom">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="coverage-item">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="non-trucking">
-                            <label for="non-trucking"><strong>Non-Trucking Liability</strong></label>
-                        </div>
-                        <div class="coverage-details">
-                            <div class="form-group">
-                                <label>NTL Limit</label>
-                                <select name="ntl_limit">
-                                    <option value="">Select limit...</option>
-                                    <option value="$1,000,000">$1,000,000</option>
-                                    <option value="$2,000,000">$2,000,000</option>
-                                    <option value="Other">Other (specify below)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Custom Limit (if other)</label>
-                                <input type="text" placeholder="$____" name="ntl_custom">
+                                <input type="text" placeholder="$____" name="auto_liability_custom">
                             </div>
                         </div>
                     </div>
@@ -631,7 +644,7 @@
                     <div class="coverage-item">
                         <div class="checkbox-item">
                             <input type="checkbox" id="physical-damage">
-                            <label for="physical-damage"><strong>Physical Damage</strong></label>
+                            <label for="physical-damage"><strong>3. Physical Damage</strong></label>
                         </div>
                         <div class="coverage-details">
                             <div class="form-group">
@@ -656,13 +669,21 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
+                            <div class="form-group full-width" style="margin-top: 15px; padding: 10px; background: #f0f8ff; border-radius: 5px;">
+                                <div id="physical-damage-summary" style="font-weight: bold; color: #2c3e50;">
+                                    Total Vehicle Values: $0 (Trucks: $0, Trailers: $0)
+                                </div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                                    Values are calculated automatically from truck and trailer entries above
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="coverage-item">
                         <div class="checkbox-item">
                             <input type="checkbox" id="cargo-coverage">
-                            <label for="cargo-coverage"><strong>Cargo Coverage</strong></label>
+                            <label for="cargo-coverage"><strong>4. Cargo Coverage</strong></label>
                         </div>
                         <div class="coverage-details">
                             <div class="form-group">
@@ -690,6 +711,14 @@
                             <div class="form-group">
                                 <label>Custom Limit (if other)</label>
                                 <input type="text" placeholder="$____" name="cargo_custom">
+                            </div>
+                            <div class="form-group full-width">
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="refrigerated-freight" name="cargo_refrigerated_freight">
+                                        <label for="refrigerated-freight">Includes Refrigerated Freight</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -729,31 +758,22 @@
 
                     <div class="coverage-item">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="general-liability">
-                            <label for="general-liability"><strong>General Liability</strong></label>
+                            <input type="checkbox" id="non-trucking">
+                            <label for="non-trucking"><strong>Non-Trucking Liability</strong></label>
                         </div>
                         <div class="coverage-details">
                             <div class="form-group">
-                                <label>Per Occurrence Limit</label>
-                                <select name="gl_per_occurrence">
-                                    <option value="$1,000,000" selected>$1,000,000 (Standard)</option>
-                                    <option value="$2,000,000">$2,000,000</option>
-                                    <option value="$500,000">$500,000</option>
-                                    <option value="Other">Other (specify below)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Aggregate Limit</label>
-                                <select name="gl_aggregate">
-                                    <option value="$2,000,000" selected>$2,000,000 (Standard)</option>
-                                    <option value="$3,000,000">$3,000,000</option>
+                                <label>NTL Limit</label>
+                                <select name="ntl_limit">
+                                    <option value="">Select limit...</option>
                                     <option value="$1,000,000">$1,000,000</option>
+                                    <option value="$2,000,000">$2,000,000</option>
                                     <option value="Other">Other (specify below)</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Custom Limits (if other)</label>
-                                <input type="text" placeholder="Per Occ / Aggregate" name="gl_custom">
+                                <label>Custom Limit (if other)</label>
+                                <input type="text" placeholder="$____" name="ntl_custom">
                             </div>
                         </div>
                     </div>
@@ -841,7 +861,7 @@
         </div>
         
         <div class="section">
-            <h2 class="section-header">🗺️ 7. Operational Insights</h2>
+            <h2 class="section-header">🗺️ 8. Operational Insights</h2>
             <div class="section-content">
                 <div class="form-grid">
                     <div class="form-group">
@@ -1149,7 +1169,8 @@
         function updateRemoveButtons() {
             // Show/hide remove buttons based on count
             const driverEntries = document.querySelectorAll('.driver-entry');
-            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
+            const truckEntries = document.querySelectorAll('.truck-entry');
+            const trailerEntries = document.querySelectorAll('.trailer-entry');
             const commodityEntries = document.querySelectorAll('.commodity-entry');
             
             driverEntries.forEach((entry, index) => {
@@ -1159,10 +1180,17 @@
                 }
             });
             
-            vehicleEntries.forEach((entry, index) => {
+            truckEntries.forEach((entry, index) => {
                 const removeBtn = entry.querySelector('.remove-btn');
                 if (removeBtn) {
-                    removeBtn.style.display = vehicleEntries.length > 1 ? 'inline-block' : 'none';
+                    removeBtn.style.display = truckEntries.length > 1 ? 'inline-block' : 'none';
+                }
+            });
+            
+            trailerEntries.forEach((entry, index) => {
+                const removeBtn = entry.querySelector('.remove-btn');
+                if (removeBtn) {
+                    removeBtn.style.display = trailerEntries.length > 1 ? 'inline-block' : 'none';
                 }
             });
             
@@ -1388,8 +1416,10 @@
             
             // FormSubmit specific fields
             const driverCount = document.querySelectorAll('.driver-entry').length;
-            const vehicleCount = document.querySelectorAll('.vehicle-entry').length;
-            const fleetInfo = `${vehicleCount}V/${driverCount}D`;
+            const truckCount = document.querySelectorAll('.truck-entry').length;
+            const trailerCount = document.querySelectorAll('.trailer-entry').length;
+            const totalVehicles = truckCount + trailerCount;
+            const fleetInfo = `${totalVehicles}V(${truckCount}T/${trailerCount}TR)/${driverCount}D`;
             
             emailData.append('_subject', `New Trucking Quote - ${formData.businessName} (${fleetInfo}) - Agency #${formData.agencyNumber}`);
             emailData.append('_cc', formData.email);
@@ -1435,18 +1465,46 @@
             emailData.append('Total_Drivers', driverEntries.length);
             emailData.append('Driver_Summary', driverSummary.join(', ') || 'None');
             
-            // Add vehicle summary
-            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
-            let vehicleSummary = [];
-            vehicleEntries.forEach((entry, index) => {
-                const vehicleNum = entry.getAttribute('data-vehicle');
-                const vehicleInfo = entry.querySelector(`input[name="vehicle_${vehicleNum}_make_model"]`).value;
-                if (vehicleInfo) {
-                    vehicleSummary.push(`Vehicle ${index + 1}: ${vehicleInfo}`);
+            // Add truck summary
+            const truckEntries = document.querySelectorAll('.truck-entry');
+            let truckSummary = [];
+            let totalTruckValue = 0;
+            truckEntries.forEach((entry, index) => {
+                const truckNum = entry.getAttribute('data-truck');
+                const truckInfo = entry.querySelector(`input[name="truck_${truckNum}_make_model"]`).value;
+                const truckValue = entry.querySelector(`input[name="truck_${truckNum}_value"]`).value;
+                if (truckInfo) {
+                    truckSummary.push(`Truck ${index + 1}: ${truckInfo}`);
+                }
+                if (truckValue) {
+                    const value = parseFloat(truckValue.replace(/[$,]/g, '')) || 0;
+                    totalTruckValue += value;
                 }
             });
-            emailData.append('Total_Vehicles', vehicleEntries.length);
-            emailData.append('Vehicle_Summary', vehicleSummary.join(', ') || 'None');
+            emailData.append('Total_Trucks', truckEntries.length);
+            emailData.append('Truck_Summary', truckSummary.join(', ') || 'None');
+            emailData.append('Total_Truck_Value', `${totalTruckValue.toLocaleString()}`);
+            
+            // Add trailer summary
+            const trailerEntries = document.querySelectorAll('.trailer-entry');
+            let trailerSummary = [];
+            let totalTrailerValue = 0;
+            trailerEntries.forEach((entry, index) => {
+                const trailerNum = entry.getAttribute('data-trailer');
+                const trailerInfo = entry.querySelector(`input[name="trailer_${trailerNum}_make_model"]`).value;
+                const trailerValue = entry.querySelector(`input[name="trailer_${trailerNum}_value"]`).value;
+                if (trailerInfo) {
+                    trailerSummary.push(`Trailer ${index + 1}: ${trailerInfo}`);
+                }
+                if (trailerValue) {
+                    const value = parseFloat(trailerValue.replace(/[$,]/g, '')) || 0;
+                    totalTrailerValue += value;
+                }
+            });
+            emailData.append('Total_Trailers', trailerEntries.length);
+            emailData.append('Trailer_Summary', trailerSummary.join(', ') || 'None');
+            emailData.append('Total_Trailer_Value', `${totalTrailerValue.toLocaleString()}`);
+            emailData.append('Total_Physical_Damage_Value', `${(totalTruckValue + totalTrailerValue).toLocaleString()}`);
             
             // Add commodity summary
             const commodityEntries = document.querySelectorAll('.commodity-entry');
@@ -1472,12 +1530,12 @@
             
             // Add coverage options with limits
             const coverageOptions = [
-                {id: 'primary-liability', label: 'Primary_Liability', limitField: 'primary_liability_limit', customField: 'primary_liability_custom'},
-                {id: 'non-trucking', label: 'Non_Trucking_Liability', limitField: 'ntl_limit', customField: 'ntl_custom'},
-                {id: 'physical-damage', label: 'Physical_Damage', deductibles: ['comp_deductible', 'collision_deductible']},
-                {id: 'cargo-coverage', label: 'Cargo_Coverage', limitField: 'cargo_limit', deductibleField: 'cargo_deductible', customField: 'cargo_custom'},
-                {id: 'refrigerated-breakdown', label: 'Refrigerated_Breakdown', limitField: 'refrig_breakdown_limit', deductibleField: 'refrig_breakdown_deductible', customField: 'refrig_breakdown_custom'},
                 {id: 'general-liability', label: 'General_Liability', perOccField: 'gl_per_occurrence', aggregateField: 'gl_aggregate', customField: 'gl_custom'},
+                {id: 'auto-liability', label: 'Auto_Liability', limitField: 'auto_liability_limit', customField: 'auto_liability_custom'},
+                {id: 'physical-damage', label: 'Physical_Damage', deductibles: ['comp_deductible', 'collision_deductible']},
+                {id: 'cargo-coverage', label: 'Cargo_Coverage', limitField: 'cargo_limit', deductibleField: 'cargo_deductible', customField: 'cargo_custom', refrigField: 'cargo_refrigerated_freight'},
+                {id: 'refrigerated-breakdown', label: 'Refrigerated_Breakdown', limitField: 'refrig_breakdown_limit', deductibleField: 'refrig_breakdown_deductible', customField: 'refrig_breakdown_custom'},
+                {id: 'non-trucking', label: 'Non_Trucking_Liability', limitField: 'ntl_limit', customField: 'ntl_custom'},
                 {id: 'hired-non-owned', label: 'Hired_Non_Owned_Auto', limitField: 'hno_limit', customField: 'hno_custom'},
                 {id: 'trailer-interchange-cov', label: 'Trailer_Interchange', limitField: 'ti_limit', deductibleField: 'ti_deductible', customField: 'ti_custom'},
                 {id: 'garagekeepers', label: 'Garagekeepers_Liability', limitField: 'gk_limit', customField: 'gk_custom'}
@@ -1537,6 +1595,20 @@
                         const deductibleSelect = document.querySelector(`select[name="${option.deductibleField}"]`);
                         if (deductibleSelect && deductibleSelect.value) {
                             emailData.append(`${option.label}_Deductible`, deductibleSelect.value);
+                        }
+                    }
+                    
+                    // Handle Cargo Coverage refrigerated freight
+                    if (option.refrigField) {
+                        const refrigCheckbox = document.querySelector(`input[name="${option.refrigField}"]`);
+                        if (refrigCheckbox && refrigCheckbox.checked) {
+                            emailData.append(`${option.label}_Includes_Refrigerated`, 'Yes');
+                            // Update coverage details to show refrigerated freight
+                            const currentDetail = coverageDetails.find(detail => detail.startsWith(option.label.replace('_', ' ')));
+                            if (currentDetail) {
+                                const index = coverageDetails.indexOf(currentDetail);
+                                coverageDetails[index] = currentDetail + ' (Incl. Refrigerated Freight)';
+                            }
                         }
                     }
                     
@@ -1613,10 +1685,14 @@
             document.querySelector('input[placeholder="MC Number"]').required = true;
             document.querySelector('input[placeholder="Agency reference number"]').required = true;
             
+            // Add required to driver birth date
+            document.querySelector('input[name="driver_1_birth_date"]').required = true;
+            
             updateRemoveButtons();
             setupCoverageToggles();
             setupPercentageCalculation();
             setupAddressHandling();
+            setupVehicleValueCalculation();
             
             // Real-time validation
             document.addEventListener('input', function(e) {
@@ -1650,6 +1726,18 @@
                 // Show garage address section
                 garageSection.style.display = 'block';
             }
+        }
+        
+        function setupVehicleValueCalculation() {
+            // Setup real-time calculation for vehicle values
+            document.addEventListener('input', function(e) {
+                if (e.target.name && (e.target.name.includes('truck_') || e.target.name.includes('trailer_')) && e.target.name.includes('_value')) {
+                    updatePhysicalDamageSummary();
+                }
+            });
+            
+            // Initial calculation
+            updatePhysicalDamageSummary();
         }
         
         function setupAddressHandling() {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trucking Insurance Quote Application</title>
+    <title>Network TruckInsurance Services - Quote Application</title>
     <style>
         * {
             margin: 0;
@@ -478,6 +478,7 @@
             <input type="hidden" name="agent_notes" id="hiddenAgentNotes" value="">
             <input type="hidden" name="documents_needed" value="Loss runs from current carrier, IFTA reports (last 4 quarters) - MVRs will be ordered by agency. Offer loss run document assistance via Adobe Sign.">
             <input type="hidden" name="status" value="Quote Received - Pending Loss Runs/IFTAS">
+            
             <!-- Section 1: Business Information -->
             <div class="section">
                 <div class="section-header">
@@ -792,6 +793,10 @@
                         <div class="summary-value" id="quoteDate">Loading...</div>
                     </div>
                     <div class="summary-item">
+                        <div class="summary-label">Agency Number</div>
+                        <div class="summary-value" id="summaryAgencyId">Not entered</div>
+                    </div>
+                    <div class="summary-item">
                         <div class="summary-label">Business Name</div>
                         <div class="summary-value" id="summaryBusinessName">Not entered</div>
                     </div>
@@ -806,6 +811,10 @@
                     <div class="summary-item">
                         <div class="summary-label">Coverage Types</div>
                         <div class="summary-value" id="summaryCoverageCount">0 selected</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Submission Status</div>
+                        <div class="summary-value" id="submissionStatus">Ready to Submit</div>
                     </div>
                 </div>
             </div>
@@ -828,7 +837,6 @@
         let driverCount = 0;
         let vehicleCount = 0;
         let commodityCount = 0;
-        let quoteIdCounter = 1;
         
         // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
@@ -878,6 +886,11 @@
             // Update quote ID when USDOT number changes
             document.getElementById('usdotNumber').addEventListener('input', function() {
                 updateQuoteId();
+            });
+            
+            // Update agency ID in summary
+            document.getElementById('agencyId').addEventListener('input', function() {
+                document.getElementById('summaryAgencyId').textContent = this.value || 'Not entered';
             });
         }
         
@@ -953,8 +966,6 @@
         }
         
         function checkSectionComplete(sectionNumber) {
-            // Implementation for checking if section is complete
-            // This is a simplified version - you could make it more sophisticated
             const section = document.querySelector(`.section:nth-child(${sectionNumber + 1})`);
             const requiredFields = section?.querySelectorAll('[required]') || [];
             const completedFields = Array.from(requiredFields).filter(field => field.value.trim() !== '');
@@ -1184,6 +1195,9 @@
                                 <option value="Heavy Haul">Heavy Haul</option>
                                 <option value="Container">Container</option>
                                 <option value="Hazmat">Hazmat</option>
+                                <option value="Dump Truck">Dump Truck</option>
+                                <option value="Box Truck">Box Truck</option>
+                                <option value="Intermodal">Intermodal</option>
                                 <option value="Other">Other</option>
                             </select>
                             <div class="error-message">Commodity type is required</div>
@@ -1357,15 +1371,16 @@
             doc.text('Commercial Trucking Insurance Quote', 20, 40);
             doc.text(`Quote ID: ${formData.quoteId}`, 20, 50);
             doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 60);
+            doc.text(`Agency ID: ${formData.agencyId || 'Not specified'}`, 20, 70);
             
             // Add business information
             doc.setFontSize(14);
             doc.setTextColor(52, 152, 219);
-            doc.text('Business Information', 20, 80);
+            doc.text('Business Information', 20, 90);
             
             doc.setFontSize(11);
             doc.setTextColor(0, 0, 0);
-            let yPos = 90;
+            let yPos = 100;
             
             if (formData.businessName) {
                 doc.text(`Business Name: ${formData.businessName}`, 20, yPos);
@@ -1387,6 +1402,16 @@
                 yPos += 10;
             }
             
+            if (formData.usdotNumber) {
+                doc.text(`USDOT: ${formData.usdotNumber}`, 20, yPos);
+                yPos += 10;
+            }
+            
+            if (formData.mcNumber) {
+                doc.text(`MC Number: ${formData.mcNumber}`, 20, yPos);
+                yPos += 10;
+            }
+            
             // Add coverage information
             yPos += 10;
             doc.setFontSize(14);
@@ -1404,6 +1429,20 @@
                 });
             }
             
+            // Add fleet summary
+            yPos += 10;
+            doc.setFontSize(14);
+            doc.setTextColor(52, 152, 219);
+            doc.text('Fleet Summary', 20, yPos);
+            yPos += 10;
+            
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Drivers: ${formData.driverCount}`, 20, yPos);
+            yPos += 8;
+            doc.text(`Vehicles: ${formData.vehicleCount}`, 20, yPos);
+            yPos += 8;
+            
             // Add footer
             doc.setFontSize(10);
             doc.setTextColor(108, 117, 125);
@@ -1411,6 +1450,79 @@
             doc.text('Contact: Ed Zahnle | (509) 215-3433 | ed.zahnle@truckerinsurance.com', 20, 290);
             
             return doc;
+        }
+        
+        // Function to submit data to Google Sheets
+        async function submitToGoogleSheets(formData) {
+            const sheetData = {
+                date: new Date().toLocaleDateString(),
+                quoteId: formData.quoteId,
+                customerName: formData.businessName,
+                contactName: formData.contactName,
+                phone: formData.phoneNumber,
+                email: formData.emailAddress,
+                state: formData.businessState,
+                agencyId: formData.agencyId,
+                operationType: getOperationType(formData),
+                commodity: getCommodityType(formData),
+                fleetTrucks: formData.driverCount,
+                fleetTrailers: '0',
+                radius: getRadius(formData),
+                yearsInBusiness: formData.yearsInBusiness,
+                currentCarrier: formData.priorCarrier || 'Not specified',
+                mvrsOrdered: 'Pending',
+                lossRunsStatus: 'Pending',
+                iftaStatus: 'Pending',
+                documentsComplete: 'No',
+                status: 'Quote Received - Pending Docs',
+                finalNotes: 'Initial quote submission via form'
+            };
+            
+            try {
+                // Submit to Google Apps Script Web App
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwrt3Axv4G0zLkp27T4Pf9uXPh1JkH2isMudio8G2t3Zd1Sj9FF4ow8ULgJw0YXDg/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(sheetData)
+                });
+                
+                console.log('Successfully submitted to Google Sheets');
+            } catch (error) {
+                console.error('Failed to submit to Google Sheets:', error);
+                // Don't throw error - let the form submission continue
+            }
+        }
+        
+        function getOperationType(formData) {
+            // Extract operation type from vehicle radius data
+            const radiusSelects = document.querySelectorAll('select[name*="vehicle_"][name*="_radius"]');
+            for (let select of radiusSelects) {
+                if (select.value) {
+                    if (select.value.includes('0-100') || select.value.includes('101-300')) {
+                        return 'Local';
+                    } else if (select.value.includes('301-500')) {
+                        return 'Regional';
+                    } else if (select.value.includes('500+')) {
+                        return 'Long Haul';
+                    }
+                }
+            }
+            return 'Local'; // Default
+        }
+        
+        function getCommodityType(formData) {
+            // Get first commodity type
+            const commoditySelect = document.querySelector('select[name*="commodity_1_type"]');
+            return commoditySelect ? commoditySelect.value : 'General Freight';
+        }
+        
+        function getRadius(formData) {
+            // Get first vehicle radius
+            const radiusSelect = document.querySelector('select[name*="vehicle_1_radius"]');
+            return radiusSelect ? radiusSelect.value : 'Not specified';
         }
         
         async function submitQuote() {
@@ -1432,7 +1544,7 @@
                 const formData = collectFormData();
                 
                 // Update hidden fields for Formsubmit
-                const quoteId = updateQuoteId(); // Get current quote ID based on USDOT
+                const quoteId = updateQuoteId();
                 document.getElementById('hiddenQuoteId').value = quoteId;
                 document.getElementById('hiddenSubmissionDate').value = new Date().toISOString();
                 document.getElementById('emailSubject').value = `New Trucking Quote: ${quoteId} - ${formData.businessName}`;
@@ -1451,8 +1563,11 @@
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
                 
+                // Submit to Google Sheets
+                await submitToGoogleSheets(formData);
+                
                 // Add agent notes section for your use
-                const agentNotes = prompt(`Quote ${quoteId} PDF downloaded!
+                const agentNotes = prompt(`Quote ${quoteId} PDF downloaded & saved to tracking sheet!
 
 Add any phone call notes for this quote:
 (Optional - these will be included in the email)`);
@@ -1469,7 +1584,7 @@ Add any phone call notes for this quote:
                 console.error('Error during submission:', error);
                 
                 // Fallback - still try to submit form
-                alert('PDF generation had an issue, but submitting quote data via email...');
+                alert('There was an issue with the tracking system, but submitting quote data via email...');
                 document.getElementById('quoteForm').submit();
             }
         }

@@ -236,6 +236,21 @@
         .required {
             color: #e74c3c;
         }
+        
+        .dashboard-section {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .auto-generated {
+            background: #f0f8ff;
+            border: 1px solid #3498db;
+            color: #2c3e50;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -263,27 +278,27 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Business Name <span class="required">*</span></label>
-                        <input type="text" placeholder="Legal name of insured">
+                        <input type="text" id="business-name" placeholder="Legal name of insured">
                         <div class="notes">Legal name of insured</div>
                     </div>
                     <div class="form-group">
                         <label>Contact Name <span class="required">*</span></label>
-                        <input type="text" placeholder="Primary contact">
+                        <input type="text" id="contact-name" placeholder="Primary contact">
                     </div>
                     <div class="form-group">
                         <label>Phone Number <span class="required">*</span></label>
-                        <input type="tel" placeholder="(000) 000-0000">
+                        <input type="tel" id="phone" placeholder="(000) 000-0000">
                     </div>
                     <div class="form-group">
                         <label>Email Address <span class="required">*</span></label>
-                        <input type="email" placeholder="email@company.com">
+                        <input type="email" id="email" placeholder="email@company.com">
                     </div>
                     <div class="form-group full-width">
                         <label>Business Address <span class="required">*</span></label>
                         <input type="text" placeholder="Street Address" name="business_address" style="margin-bottom: 8px;">
                         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
                             <input type="text" placeholder="City" name="business_city">
-                            <input type="text" placeholder="State" name="business_state">
+                            <input type="text" placeholder="State" name="business_state" id="business-state">
                             <input type="text" placeholder="ZIP Code" name="business_zip">
                         </div>
                     </div>
@@ -319,11 +334,10 @@
                     <div class="form-group">
                         <label>State Permit#</label>
                         <input type="text" placeholder="State permit number">
-                        <div class="notes">Replaces CA#</div>
                     </div>
                     <div class="form-group">
                         <label>Agency Number <span class="required">*</span></label>
-                        <input type="text" placeholder="Agency reference number">
+                        <input type="text" id="agency-number" placeholder="Agency reference number">
                         <div class="notes">Internal agency tracking number</div>
                     </div>
                     <div class="form-group">
@@ -379,7 +393,7 @@
                                 <div class="notes">Summary or attach loss runs</div>
                             </div>
                         </div>
-                        <button type="button" class="remove-btn" onclick="removeDriver(1)" style="background: #e74c3c; color: white; padding: 8px 15px; border: none; border-radius: 4px; margin-top: 10px; display: none;">Remove Driver #1</button>
+                        <button type="button" class="remove-btn" onclick="removeDriver(1)" style="display: none;">Remove Driver #1</button>
                     </div>
                 </div>
                 <button type="button" onclick="addDriver()" class="add-btn">+ Add Another Driver</button>
@@ -417,7 +431,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Radius of Operation <span class="required">*</span></label>
-                                <select name="vehicle_1_radius">
+                                <select name="vehicle_1_radius" onchange="updateFleetSummary()">
                                     <option value="">Select...</option>
                                     <option value="0-100">0-100 miles</option>
                                     <option value="101-300">101-300 miles</option>
@@ -447,7 +461,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="remove-btn" onclick="removeVehicle(1)" style="background: #e74c3c; color: white; padding: 8px 15px; border: none; border-radius: 4px; margin-top: 10px; display: none;">Remove Vehicle #1</button>
+                        <button type="button" class="remove-btn" onclick="removeVehicle(1)" style="display: none;">Remove Vehicle #1</button>
                     </div>
                 </div>
                 <button type="button" onclick="addVehicle()" class="add-btn">+ Add Another Vehicle</button>
@@ -511,28 +525,6 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
                     <button type="button" onclick="addCommodity()" class="add-btn">+ Add Another Commodity</button>
                     <div id="percentage-total" style="font-weight: bold; color: #3498db; font-size: 16px;">Total: 0%</div>
-                </div>
-                
-                <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #e9ecef;">
-                    <h4 style="color: #2c3e50; margin-bottom: 15px;">Special Coverage Requirements</h4>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="refrigeration" name="special_refrigeration">
-                            <label for="refrigeration">Refrigeration Coverage</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="hazmat-coverage" name="special_hazmat">
-                            <label for="hazmat-coverage">Hazmat Endorsement</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="livestock-coverage" name="special_livestock">
-                            <label for="livestock-coverage">Livestock Coverage</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="high-value" name="special_high_value">
-                            <label for="high-value">High-Value Cargo Coverage</label>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -668,14 +660,6 @@
                                     <option value="$10,000">$10,000</option>
                                     <option value="Other">Other</option>
                                 </select>
-                            </div>
-                            <div class="form-group full-width" style="margin-top: 15px; padding: 10px; background: #f0f8ff; border-radius: 5px;">
-                                <div id="physical-damage-summary" style="font-weight: bold; color: #2c3e50;">
-                                    Total Vehicle Values: $0 (Trucks: $0, Trailers: $0)
-                                </div>
-                                <div style="font-size: 12px; color: #666; margin-top: 5px;">
-                                    Values are calculated automatically from truck and trailer entries above
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -901,16 +885,26 @@
             </div>
         </div>
         
-        <button class="save-btn" onclick="saveQuote()">💾 Save Quote & Generate Summary</button>
+        <button class="save-btn" onclick="saveQuote()">💾 Save Quote & Generate PDF</button>
     </div>
-    
-    <!-- PDF Generation Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <script>
         let driverCount = 1;
         let vehicleCount = 1;
         let commodityCount = 1;
+        let quoteCounter = 1;
+        
+        // Auto-generate quote ID and date on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateRemoveButtons();
+            
+            // Setup real-time updates
+            document.addEventListener('change', function(e) {
+                if (e.target.name && e.target.name.includes('vehicle_') && e.target.name.includes('_radius')) {
+                    // Vehicle radius changed - no action needed for clean PDF form
+                }
+            });
+        });
         
         function addDriver() {
             driverCount++;
@@ -925,6 +919,10 @@
                     <div class="form-group">
                         <label>Driver Name <span class="required">*</span></label>
                         <input type="text" placeholder="Full name" name="driver_${driverCount}_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth <span class="required">*</span></label>
+                        <input type="date" name="driver_${driverCount}_birth_date">
                     </div>
                     <div class="form-group">
                         <label>License State & Number <span class="required">*</span></label>
@@ -961,37 +959,6 @@
             const driverElement = document.querySelector(`[data-driver="${driverNum}"]`);
             if (driverElement) {
                 driverElement.remove();
-            }
-
-            // Commodities Information
-            const commodityEntries = document.querySelectorAll('.commodity-entry');
-            if (commodityEntries.length > 0) {
-                doc.setFontSize(12);
-                doc.setFont(undefined, 'bold');
-                doc.text('COMMODITIES & CARGO', 20, yPos);
-                yPos += 10;
-                
-                doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
-                
-                commodityEntries.forEach((entry, index) => {
-                    const commodityNum = entry.getAttribute('data-commodity');
-                    const commodityType = entry.querySelector(`select[name="commodity_${commodityNum}_type"]`).value || 'N/A';
-                    const percentage = entry.querySelector(`input[name="commodity_${commodityNum}_percentage"]`).value || 'N/A';
-                    const avgValue = entry.querySelector(`input[name="commodity_${commodityNum}_avg_value"]`).value || 'N/A';
-                    const customType = entry.querySelector(`input[name="commodity_${commodityNum}_custom"]`).value;
-                    
-                    const displayType = commodityType === 'Other' && customType ? customType : commodityType;
-                    
-                    doc.text(`Commodity #${index + 1}: ${displayType} (${percentage}%)`, 20, yPos);
-                    yPos += 6;
-                    if (avgValue !== 'N/A') {
-                        doc.text(`Average Value: ${avgValue}`, 25, yPos);
-                        yPos += 6;
-                    }
-                    yPos += 2;
-                });
-                yPos += 7;
             }
             updateRemoveButtons();
         }
@@ -1169,8 +1136,7 @@
         function updateRemoveButtons() {
             // Show/hide remove buttons based on count
             const driverEntries = document.querySelectorAll('.driver-entry');
-            const truckEntries = document.querySelectorAll('.truck-entry');
-            const trailerEntries = document.querySelectorAll('.trailer-entry');
+            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
             const commodityEntries = document.querySelectorAll('.commodity-entry');
             
             driverEntries.forEach((entry, index) => {
@@ -1180,17 +1146,10 @@
                 }
             });
             
-            truckEntries.forEach((entry, index) => {
+            vehicleEntries.forEach((entry, index) => {
                 const removeBtn = entry.querySelector('.remove-btn');
                 if (removeBtn) {
-                    removeBtn.style.display = truckEntries.length > 1 ? 'inline-block' : 'none';
-                }
-            });
-            
-            trailerEntries.forEach((entry, index) => {
-                const removeBtn = entry.querySelector('.remove-btn');
-                if (removeBtn) {
-                    removeBtn.style.display = trailerEntries.length > 1 ? 'inline-block' : 'none';
+                    removeBtn.style.display = vehicleEntries.length > 1 ? 'inline-block' : 'none';
                 }
             });
             
@@ -1201,515 +1160,12 @@
                 }
             });
         }
-        function saveQuote() {
-            // Validate all fields including dynamic entries
-            if (!validateAllFields()) {
-                return;
-            }
-            
-            // Generate PDF and send email
-            generatePDFAndSend();
-        }
-        
-        function generatePDFAndSend() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Get form data
-            const businessName = document.querySelector('input[placeholder="Legal name of insured"]').value || 'N/A';
-            const contactName = document.querySelector('input[placeholder="Primary contact"]').value || 'N/A';
-            const phone = document.querySelector('input[placeholder="(000) 000-0000"]').value || 'N/A';
-            const email = document.querySelector('input[placeholder="email@company.com"]').value || 'N/A';
-            const dotNumber = document.querySelector('input[placeholder="DOT Number"]').value || 'N/A';
-            const mcNumber = document.querySelector('input[placeholder="MC Number"]').value || 'N/A';
-            const agencyNumber = document.querySelector('input[placeholder="Agency reference number"]').value || 'N/A';
-            const yearsInBusiness = document.querySelector('select').value || 'N/A';
-            
-            // PDF Header
-            doc.setFontSize(16);
-            doc.setFont(undefined, 'bold');
-            doc.text('TRUCKING INSURANCE QUICK QUOTE', 20, 20);
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Generated: ${new Date().toLocaleDateString()}`, 150, 20);
-            doc.text(`Agency #: ${agencyNumber}`, 150, 26);
-            
-            // Add fleet summary
-            const driverCount = document.querySelectorAll('.driver-entry').length;
-            const vehicleCount = document.querySelectorAll('.vehicle-entry').length;
-            doc.text(`Fleet: ${vehicleCount} Vehicle${vehicleCount !== 1 ? 's' : ''}, ${driverCount} Driver${driverCount !== 1 ? 's' : ''}`, 150, 32);
-            
-            let yPos = 45;
-            
-            // Business Information Section
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('BUSINESS & REGULATORY INFORMATION', 20, yPos);
-            yPos += 10;
-            
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Business Name: ${businessName}`, 20, yPos);
-            yPos += 6;
-            doc.text(`Contact Name: ${contactName}`, 20, yPos);
-            yPos += 6;
-            doc.text(`Phone: ${phone}`, 20, yPos);
-            yPos += 6;
-            doc.text(`Email: ${email}`, 20, yPos);
-            yPos += 6;
-            doc.text(`USDOT#: ${dotNumber}`, 20, yPos);
-            yPos += 6;
-            doc.text(`MC#: ${mcNumber}`, 20, yPos);
-            yPos += 6;
-            doc.text(`Agency Number: ${agencyNumber}`, 20, yPos);
-            yPos += 6;
-            doc.text(`Years in Business: ${yearsInBusiness}`, 20, yPos);
-            yPos += 15;
-            
-            // Driver Information
-            const driverEntries = document.querySelectorAll('.driver-entry');
-            if (driverEntries.length > 0) {
-                doc.setFontSize(12);
-                doc.setFont(undefined, 'bold');
-                doc.text('DRIVER INFORMATION', 20, yPos);
-                yPos += 10;
-                
-                doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
-                
-                driverEntries.forEach((entry, index) => {
-                    const driverNum = entry.getAttribute('data-driver');
-                    const driverName = entry.querySelector(`input[name="driver_${driverNum}_name"]`).value || 'N/A';
-                    const licenseInfo = entry.querySelector(`input[name="driver_${driverNum}_license"]`).value || 'N/A';
-                    const experience = entry.querySelector(`select[name="driver_${driverNum}_experience"]`).value || 'N/A';
-                    
-                    doc.text(`Driver #${index + 1}: ${driverName}`, 20, yPos);
-                    yPos += 6;
-                    doc.text(`License: ${licenseInfo}`, 25, yPos);
-                    yPos += 6;
-                    doc.text(`Experience: ${experience}`, 25, yPos);
-                    yPos += 8;
-                });
-                yPos += 7;
-            }
-
-            // Vehicle Information
-            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
-            if (vehicleEntries.length > 0) {
-                doc.setFontSize(12);
-                doc.setFont(undefined, 'bold');
-                doc.text('VEHICLE & TRAILER DETAILS', 20, yPos);
-                yPos += 10;
-                
-                doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
-                
-                vehicleEntries.forEach((entry, index) => {
-                    const vehicleNum = entry.getAttribute('data-vehicle');
-                    const vehicleInfo = entry.querySelector(`input[name="vehicle_${vehicleNum}_make_model"]`).value || 'N/A';
-                    const vin = entry.querySelector(`input[name="vehicle_${vehicleNum}_vin"]`).value || 'N/A';
-                    const gvw = entry.querySelector(`select[name="vehicle_${vehicleNum}_gvw"]`).value || 'N/A';
-                    
-                    doc.text(`Vehicle #${index + 1}: ${vehicleInfo}`, 20, yPos);
-                    yPos += 6;
-                    doc.text(`VIN: ${vin}`, 25, yPos);
-                    yPos += 6;
-                    doc.text(`GVW: ${gvw}`, 25, yPos);
-                    yPos += 8;
-                });
-                yPos += 7;
-            }
-            
-            // Coverage Options with Limits
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('REQUESTED COVERAGE OPTIONS & LIMITS', 20, yPos);
-            yPos += 10;
-            
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            
-            const coverageOptions = [
-                {id: 'primary-liability', label: 'Primary Liability', limitField: 'primary_liability_limit', customField: 'primary_liability_custom'},
-                {id: 'non-trucking', label: 'Non-Trucking Liability', limitField: 'ntl_limit', customField: 'ntl_custom'},
-                {id: 'physical-damage', label: 'Physical Damage', deductibles: ['comp_deductible', 'collision_deductible']},
-                {id: 'cargo-coverage', label: 'Cargo Coverage', limitField: 'cargo_limit', deductibleField: 'cargo_deductible', customField: 'cargo_custom'},
-                {id: 'general-liability', label: 'General Liability', limitField: 'gl_limit', customField: 'gl_custom'},
-                {id: 'hired-non-owned', label: 'Hired/Non-Owned Auto', limitField: 'hno_limit', customField: 'hno_custom'},
-                {id: 'trailer-interchange-cov', label: 'Trailer Interchange', limitField: 'ti_limit', deductibleField: 'ti_deductible', customField: 'ti_custom'},
-                {id: 'garagekeepers', label: 'Garagekeepers Liability', limitField: 'gk_limit', customField: 'gk_custom'}
-            ];
-            
-            let hasSelectedCoverage = false;
-            coverageOptions.forEach(option => {
-                const checkbox = document.getElementById(option.id);
-                if (checkbox && checkbox.checked) {
-                    hasSelectedCoverage = true;
-                    let coverageText = `✓ ${option.label}`;
-                    
-                    // Add limit information
-                    if (option.limitField) {
-                        const limitSelect = document.querySelector(`select[name="${option.limitField}"]`);
-                        const customInput = option.customField ? document.querySelector(`input[name="${option.customField}"]`) : null;
-                        
-                        if (limitSelect && limitSelect.value) {
-                            if (limitSelect.value === 'Other' && customInput && customInput.value) {
-                                coverageText += ` - Limit: ${customInput.value}`;
-                            } else if (limitSelect.value !== 'Other') {
-                                coverageText += ` - Limit: ${limitSelect.value}`;
-                            }
-                        }
-                    }
-                    
-                    // Add deductible information
-                    if (option.deductibleField) {
-                        const deductibleSelect = document.querySelector(`select[name="${option.deductibleField}"]`);
-                        if (deductibleSelect && deductibleSelect.value) {
-                            coverageText += ` - Deductible: ${deductibleSelect.value}`;
-                        }
-                    }
-                    
-                    // Handle Physical Damage special case with multiple deductibles
-                    if (option.deductibles) {
-                        const compDed = document.querySelector(`select[name="${option.deductibles[0]}"]`);
-                        const collDed = document.querySelector(`select[name="${option.deductibles[1]}"]`);
-                        let dedText = [];
-                        if (compDed && compDed.value) dedText.push(`Comp: ${compDed.value}`);
-                        if (collDed && collDed.value) dedText.push(`Collision: ${collDed.value}`);
-                        if (dedText.length > 0) coverageText += ` - ${dedText.join(', ')}`;
-                    }
-                    
-                    doc.text(coverageText, 20, yPos);
-                    yPos += 6;
-                }
-            });
-            
-            if (!hasSelectedCoverage) {
-                doc.text('No coverage options selected', 20, yPos);
-                yPos += 6;
-            }
-            
-            // Convert PDF to base64
-            const pdfBase64 = doc.output('datauristring').split(',')[1];
-            
-            // Send email via Formspree (you'll need to set this up)
-            sendEmailWithPDF(pdfBase64, {
-                businessName,
-                contactName,
-                phone,
-                email,
-                dotNumber,
-                mcNumber,
-                agencyNumber
-            });
-        }
-        
-        function sendEmailWithPDF(pdfBase64, formData) {
-            // Show loading message
-            const btn = document.querySelector('.save-btn');
-            const originalText = btn.textContent;
-            btn.textContent = '📧 Sending Quote...';
-            btn.disabled = true;
-            
-            // Prepare form data for FormSubmit
-            const emailData = new FormData();
-            
-            // FormSubmit specific fields
-            const driverCount = document.querySelectorAll('.driver-entry').length;
-            const truckCount = document.querySelectorAll('.truck-entry').length;
-            const trailerCount = document.querySelectorAll('.trailer-entry').length;
-            const totalVehicles = truckCount + trailerCount;
-            const fleetInfo = `${totalVehicles}V(${truckCount}T/${trailerCount}TR)/${driverCount}D`;
-            
-            emailData.append('_subject', `New Trucking Quote - ${formData.businessName} (${fleetInfo}) - Agency #${formData.agencyNumber}`);
-            emailData.append('_cc', formData.email);
-            emailData.append('_captcha', 'false');  // Disable captcha for cleaner UX
-            emailData.append('_template', 'table');  // Use table format for better readability
-            
-            // Quote details
-            emailData.append('Agency_Number', formData.agencyNumber);
-            emailData.append('Business_Name', formData.businessName);
-            emailData.append('Contact_Name', formData.contactName);
-            emailData.append('Phone', formData.phone);
-            emailData.append('Email', formData.email);
-            emailData.append('Business_Address', `${formData.businessAddress}, ${formData.businessCity}, ${formData.businessState} ${formData.businessZip}`);
-            emailData.append('Garage_Address', formData.sameAddress ? 'Same as business address' : `${formData.garageAddress}, ${formData.garageCity}, ${formData.garageState} ${formData.garageZip}`);
-            emailData.append('DOT_Number', formData.dotNumber);
-            emailData.append('MC_Number', formData.mcNumber);
-            
-            // Add all form fields including multiple drivers and vehicles
-            const allInputs = document.querySelectorAll('input, select, textarea');
-            allInputs.forEach(input => {
-                if (input.value && input.name) {
-                    const fieldName = input.name || input.placeholder || input.id || 'field';
-                    const cleanFieldName = fieldName.replace(/[^a-zA-Z0-9_]/g, '_');
-                    
-                    if (input.type === 'checkbox') {
-                        emailData.append(cleanFieldName, input.checked ? 'Yes' : 'No');
-                    } else {
-                        emailData.append(cleanFieldName, input.value);
-                    }
-                }
-            });
-            
-            // Add driver summary
-            const driverEntries = document.querySelectorAll('.driver-entry');
-            let driverSummary = [];
-            driverEntries.forEach((entry, index) => {
-                const driverNum = entry.getAttribute('data-driver');
-                const driverName = entry.querySelector(`input[name="driver_${driverNum}_name"]`).value;
-                if (driverName) {
-                    driverSummary.push(`Driver ${index + 1}: ${driverName}`);
-                }
-            });
-            emailData.append('Total_Drivers', driverEntries.length);
-            emailData.append('Driver_Summary', driverSummary.join(', ') || 'None');
-            
-            // Add truck summary
-            const truckEntries = document.querySelectorAll('.truck-entry');
-            let truckSummary = [];
-            let totalTruckValue = 0;
-            truckEntries.forEach((entry, index) => {
-                const truckNum = entry.getAttribute('data-truck');
-                const truckInfo = entry.querySelector(`input[name="truck_${truckNum}_make_model"]`).value;
-                const truckValue = entry.querySelector(`input[name="truck_${truckNum}_value"]`).value;
-                if (truckInfo) {
-                    truckSummary.push(`Truck ${index + 1}: ${truckInfo}`);
-                }
-                if (truckValue) {
-                    const value = parseFloat(truckValue.replace(/[$,]/g, '')) || 0;
-                    totalTruckValue += value;
-                }
-            });
-            emailData.append('Total_Trucks', truckEntries.length);
-            emailData.append('Truck_Summary', truckSummary.join(', ') || 'None');
-            emailData.append('Total_Truck_Value', `${totalTruckValue.toLocaleString()}`);
-            
-            // Add trailer summary
-            const trailerEntries = document.querySelectorAll('.trailer-entry');
-            let trailerSummary = [];
-            let totalTrailerValue = 0;
-            trailerEntries.forEach((entry, index) => {
-                const trailerNum = entry.getAttribute('data-trailer');
-                const trailerInfo = entry.querySelector(`input[name="trailer_${trailerNum}_make_model"]`).value;
-                const trailerValue = entry.querySelector(`input[name="trailer_${trailerNum}_value"]`).value;
-                if (trailerInfo) {
-                    trailerSummary.push(`Trailer ${index + 1}: ${trailerInfo}`);
-                }
-                if (trailerValue) {
-                    const value = parseFloat(trailerValue.replace(/[$,]/g, '')) || 0;
-                    totalTrailerValue += value;
-                }
-            });
-            emailData.append('Total_Trailers', trailerEntries.length);
-            emailData.append('Trailer_Summary', trailerSummary.join(', ') || 'None');
-            emailData.append('Total_Trailer_Value', `${totalTrailerValue.toLocaleString()}`);
-            emailData.append('Total_Physical_Damage_Value', `${(totalTruckValue + totalTrailerValue).toLocaleString()}`);
-            
-            // Add commodity summary
-            const commodityEntries = document.querySelectorAll('.commodity-entry');
-            let commoditySummary = [];
-            let totalPercentage = 0;
-            
-            commodityEntries.forEach((entry, index) => {
-                const commodityNum = entry.getAttribute('data-commodity');
-                const commodityType = entry.querySelector(`select[name="commodity_${commodityNum}_type"]`).value;
-                const percentage = parseInt(entry.querySelector(`input[name="commodity_${commodityNum}_percentage"]`).value) || 0;
-                const customType = entry.querySelector(`input[name="commodity_${commodityNum}_custom"]`).value;
-                
-                if (commodityType) {
-                    const displayType = commodityType === 'Other' && customType ? customType : commodityType;
-                    commoditySummary.push(`${displayType}: ${percentage}%`);
-                    totalPercentage += percentage;
-                }
-            });
-            
-            emailData.append('Total_Commodities', commodityEntries.length);
-            emailData.append('Commodity_Summary', commoditySummary.join(' | ') || 'None specified');
-            emailData.append('Total_Percentage', `${totalPercentage}%`);
-            
-            // Add coverage options with limits
-            const coverageOptions = [
-                {id: 'general-liability', label: 'General_Liability', perOccField: 'gl_per_occurrence', aggregateField: 'gl_aggregate', customField: 'gl_custom'},
-                {id: 'auto-liability', label: 'Auto_Liability', limitField: 'auto_liability_limit', customField: 'auto_liability_custom'},
-                {id: 'physical-damage', label: 'Physical_Damage', deductibles: ['comp_deductible', 'collision_deductible']},
-                {id: 'cargo-coverage', label: 'Cargo_Coverage', limitField: 'cargo_limit', deductibleField: 'cargo_deductible', customField: 'cargo_custom', refrigField: 'cargo_refrigerated_freight'},
-                {id: 'refrigerated-breakdown', label: 'Refrigerated_Breakdown', limitField: 'refrig_breakdown_limit', deductibleField: 'refrig_breakdown_deductible', customField: 'refrig_breakdown_custom'},
-                {id: 'non-trucking', label: 'Non_Trucking_Liability', limitField: 'ntl_limit', customField: 'ntl_custom'},
-                {id: 'hired-non-owned', label: 'Hired_Non_Owned_Auto', limitField: 'hno_limit', customField: 'hno_custom'},
-                {id: 'trailer-interchange-cov', label: 'Trailer_Interchange', limitField: 'ti_limit', deductibleField: 'ti_deductible', customField: 'ti_custom'},
-                {id: 'garagekeepers', label: 'Garagekeepers_Liability', limitField: 'gk_limit', customField: 'gk_custom'}
-            ];
-            
-            let selectedCoverage = [];
-            let coverageDetails = [];
-            
-            coverageOptions.forEach(option => {
-                const checkbox = document.getElementById(option.id);
-                if (checkbox && checkbox.checked) {
-                    selectedCoverage.push(option.label.replace('_', ' '));
-                    emailData.append(option.label, 'Selected');
-                    
-                    // Handle General Liability special case with per occurrence and aggregate
-                    if (option.perOccField && option.aggregateField) {
-                        const perOccSelect = document.querySelector(`select[name="${option.perOccField}"]`);
-                        const aggregateSelect = document.querySelector(`select[name="${option.aggregateField}"]`);
-                        const customInput = option.customField ? document.querySelector(`input[name="${option.customField}"]`) : null;
-                        
-                        if (perOccSelect && perOccSelect.value) {
-                            emailData.append(`${option.label}_Per_Occurrence`, perOccSelect.value);
-                        }
-                        if (aggregateSelect && aggregateSelect.value) {
-                            emailData.append(`${option.label}_Aggregate`, aggregateSelect.value);
-                        }
-                        if (customInput && customInput.value) {
-                            emailData.append(`${option.label}_Custom`, customInput.value);
-                        }
-                        
-                        if (perOccSelect && perOccSelect.value && aggregateSelect && aggregateSelect.value) {
-                            if (perOccSelect.value === 'Other' && customInput && customInput.value) {
-                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${customInput.value}`);
-                            } else {
-                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${perOccSelect.value} Per Occ / ${aggregateSelect.value} Agg`);
-                            }
-                        }
-                    }
-                    // Add limit information for other coverages
-                    else if (option.limitField) {
-                        const limitSelect = document.querySelector(`select[name="${option.limitField}"]`);
-                        const customInput = option.customField ? document.querySelector(`input[name="${option.customField}"]`) : null;
-                        
-                        if (limitSelect && limitSelect.value) {
-                            emailData.append(`${option.label}_Limit`, limitSelect.value);
-                            if (limitSelect.value === 'Other' && customInput && customInput.value) {
-                                emailData.append(`${option.label}_Custom_Limit`, customInput.value);
-                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${customInput.value}`);
-                            } else if (limitSelect.value !== 'Other') {
-                                coverageDetails.push(`${option.label.replace('_', ' ')}: ${limitSelect.value}`);
-                            }
-                        }
-                    }
-                    
-                    // Add deductible information
-                    if (option.deductibleField) {
-                        const deductibleSelect = document.querySelector(`select[name="${option.deductibleField}"]`);
-                        if (deductibleSelect && deductibleSelect.value) {
-                            emailData.append(`${option.label}_Deductible`, deductibleSelect.value);
-                        }
-                    }
-                    
-                    // Handle Cargo Coverage refrigerated freight
-                    if (option.refrigField) {
-                        const refrigCheckbox = document.querySelector(`input[name="${option.refrigField}"]`);
-                        if (refrigCheckbox && refrigCheckbox.checked) {
-                            emailData.append(`${option.label}_Includes_Refrigerated`, 'Yes');
-                            // Update coverage details to show refrigerated freight
-                            const currentDetail = coverageDetails.find(detail => detail.startsWith(option.label.replace('_', ' ')));
-                            if (currentDetail) {
-                                const index = coverageDetails.indexOf(currentDetail);
-                                coverageDetails[index] = currentDetail + ' (Incl. Refrigerated Freight)';
-                            }
-                        }
-                    }
-                    
-                    // Handle Physical Damage special case
-                    if (option.deductibles) {
-                        const compDed = document.querySelector(`select[name="${option.deductibles[0]}"]`);
-                        const collDed = document.querySelector(`select[name="${option.deductibles[1]}"]`);
-                        if (compDed && compDed.value) emailData.append('Comprehensive_Deductible', compDed.value);
-                        if (collDed && collDed.value) emailData.append('Collision_Deductible', collDed.value);
-                    }
-                }
-            });
-            
-            emailData.append('Selected_Coverage_Summary', selectedCoverage.join(', ') || 'None selected');
-            emailData.append('Coverage_Details_Summary', coverageDetails.join(' | ') || 'No limits specified');
-            emailData.append('Quote_Date', new Date().toLocaleDateString());
-            emailData.append('Quote_Time', new Date().toLocaleTimeString());
-            
-            // Create a blob from base64 and append as file
-            const binaryString = atob(pdfBase64);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
-            emailData.append('attachment', pdfBlob, `TruckingQuote_${formData.businessName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
-            
-            // Send via FormSubmit
-            fetch('https://formsubmit.co/ed.zahnle@truckerinsurance.com', {
-                method: 'POST',
-                body: emailData
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('✅ Quote submitted successfully! You should receive the quote details via email shortly.');
-                    // Reset form
-                    document.querySelectorAll('input, select, textarea').forEach(field => {
-                        if (field.type === 'checkbox') {
-                            field.checked = false;
-                        } else {
-                            field.value = '';
-                        }
-                    });
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('❌ There was an error submitting the quote. Please try again or contact support.');
-            })
-            .finally(() => {
-                btn.textContent = originalText;
-                btn.disabled = false;
-            });
-        }
-        
-        // Form validation
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add required attributes to critical fields
-            document.querySelector('input[placeholder="Legal name of insured"]').required = true;
-            document.querySelector('input[placeholder="Primary contact"]').required = true;
-            document.querySelector('input[placeholder="(000) 000-0000"]').required = true;
-            document.querySelector('input[placeholder="email@company.com"]').required = true;
-            document.querySelector('input[name="business_address"]').required = true;
-            document.querySelector('input[name="business_city"]').required = true;
-            document.querySelector('input[name="business_state"]').required = true;
-            document.querySelector('input[name="business_zip"]').required = true;
-            document.querySelector('input[name="garage_address"]').required = true;
-            document.querySelector('input[name="garage_city"]').required = true;
-            document.querySelector('input[name="garage_state"]').required = true;
-            document.querySelector('input[name="garage_zip"]').required = true;
-            document.querySelector('input[placeholder="DOT Number"]').required = true;
-            document.querySelector('input[placeholder="MC Number"]').required = true;
-            document.querySelector('input[placeholder="Agency reference number"]').required = true;
-            
-            // Add required to driver birth date
-            document.querySelector('input[name="driver_1_birth_date"]').required = true;
-            
-            updateRemoveButtons();
-            setupCoverageToggles();
-            setupPercentageCalculation();
-            setupAddressHandling();
-            setupVehicleValueCalculation();
-            
-            // Real-time validation
-            document.addEventListener('input', function(e) {
-                if (e.target.required && !e.target.value) {
-                    e.target.style.borderColor = '#e74c3c';
-                } else if (e.target.value) {
-                    e.target.style.borderColor = '#27ae60';
-                }
-            });
-        });
         
         function toggleGarageAddress() {
             const checkbox = document.getElementById('same-garage-address');
             const garageSection = document.getElementById('garage-address-section');
             
             if (checkbox.checked) {
-                // Hide garage address section and copy business address
                 garageSection.style.display = 'none';
                 
                 // Copy business address to garage address fields
@@ -1723,179 +1179,26 @@
                 document.querySelector('input[name="garage_state"]').value = businessState;
                 document.querySelector('input[name="garage_zip"]').value = businessZip;
             } else {
-                // Show garage address section
                 garageSection.style.display = 'block';
             }
         }
         
-        function setupVehicleValueCalculation() {
-            // Setup real-time calculation for vehicle values
-            document.addEventListener('input', function(e) {
-                if (e.target.name && (e.target.name.includes('truck_') || e.target.name.includes('trailer_')) && e.target.name.includes('_value')) {
-                    updatePhysicalDamageSummary();
-                }
-            });
-            
-            // Initial calculation
-            updatePhysicalDamageSummary();
-        }
-        
-        function setupAddressHandling() {
-            // Setup auto-copy of business address when business address fields change
-            const businessAddressFields = ['business_address', 'business_city', 'business_state', 'business_zip'];
-            
-            businessAddressFields.forEach(fieldName => {
-                const field = document.querySelector(`input[name="${fieldName}"]`);
-                if (field) {
-                    field.addEventListener('input', function() {
-                        const checkbox = document.getElementById('same-garage-address');
-                        if (checkbox.checked) {
-                            // Auto-update garage address if same address is checked
-                            const garageFieldName = fieldName.replace('business_', 'garage_');
-                            const garageField = document.querySelector(`input[name="${garageFieldName}"]`);
-                            if (garageField) {
-                                garageField.value = this.value;
-                            }
-                        }
-                    });
-                }
-            });
-        }
-        
-        function setupPercentageCalculation() {
-            // Setup percentage calculation for existing and new inputs
-            document.addEventListener('input', function(e) {
-                if (e.target.name && e.target.name.includes('commodity_') && e.target.name.includes('_percentage')) {
-                    updatePercentageTotal();
-                }
-            });
-            updatePercentageTotal();
-        }
-        
-        function setupCoverageToggles() {
-            // Setup coverage detail visibility
-            const coverageCheckboxes = document.querySelectorAll('.coverage-item input[type="checkbox"]');
-            
-            coverageCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const coverageItem = this.closest('.coverage-item');
-                    const coverageDetails = coverageItem.querySelector('.coverage-details');
-                    
-                    if (this.checked) {
-                        coverageDetails.style.display = 'grid';
-                        coverageItem.style.borderColor = '#3498db';
-                        coverageItem.style.background = '#f0f8ff';
-                    } else {
-                        coverageDetails.style.display = 'none';
-                        coverageItem.style.borderColor = '#e9ecef';
-                        coverageItem.style.background = '#f8f9fa';
-                        
-                        // Clear values when unchecked
-                        const inputs = coverageDetails.querySelectorAll('input, select');
-                        inputs.forEach(input => input.value = '');
-                    }
-                });
-            });
-        }
-        
-        function validateAllFields() {
-            let isValid = true;
-            const requiredFields = document.querySelectorAll('input[required], select[required]');
-            
-            requiredFields.forEach(field => {
-                if (!field.value) {
-                    field.style.borderColor = '#e74c3c';
-                    isValid = false;
-                } else {
-                    field.style.borderColor = '#27ae60';
-                }
-            });
-            
-            // Validate at least one driver has required info
-            const driverEntries = document.querySelectorAll('.driver-entry');
-            let hasValidDriver = false;
-            driverEntries.forEach(entry => {
-                const driverNum = entry.getAttribute('data-driver');
-                const driverName = entry.querySelector(`input[name="driver_${driverNum}_name"]`);
-                const driverLicense = entry.querySelector(`input[name="driver_${driverNum}_license"]`);
-                const driverExperience = entry.querySelector(`select[name="driver_${driverNum}_experience"]`);
-                
-                if (driverName.value && driverLicense.value && driverExperience.value) {
-                    hasValidDriver = true;
-                } else if (driverName.value || driverLicense.value || driverExperience.value) {
-                    // Partial info - mark required fields
-                    if (!driverName.value) driverName.style.borderColor = '#e74c3c';
-                    if (!driverLicense.value) driverLicense.style.borderColor = '#e74c3c';
-                    if (!driverExperience.value) driverExperience.style.borderColor = '#e74c3c';
-                    isValid = false;
-                }
-            });
-            
-            // Validate at least one vehicle has required info
-            const vehicleEntries = document.querySelectorAll('.vehicle-entry');
-            let hasValidVehicle = false;
-            vehicleEntries.forEach(entry => {
-                const vehicleNum = entry.getAttribute('data-vehicle');
-                const vehicleMake = entry.querySelector(`input[name="vehicle_${vehicleNum}_make_model"]`);
-                const vehicleVin = entry.querySelector(`input[name="vehicle_${vehicleNum}_vin"]`);
-                const vehicleRadius = entry.querySelector(`select[name="vehicle_${vehicleNum}_radius"]`);
-                
-                if (vehicleMake.value && vehicleVin.value && vehicleRadius.value) {
-                    hasValidVehicle = true;
-                } else if (vehicleMake.value || vehicleVin.value || vehicleRadius.value) {
-                    // Partial info - mark required fields
-                    if (!vehicleMake.value) vehicleMake.style.borderColor = '#e74c3c';
-                    if (!vehicleVin.value) vehicleVin.style.borderColor = '#e74c3c';
-                    if (!vehicleRadius.value) vehicleRadius.style.borderColor = '#e74c3c';
-                    isValid = false;
-                }
-            });
-            
-            if (!hasValidDriver) {
-                alert('Please complete at least one driver with all required information.');
-                isValid = false;
+        function saveQuote() {
+            // Validate required fields for professional PDF generation
+            if (!validateAllFields()) {
+                return;
             }
             
-            if (!hasValidVehicle) {
-                alert('Please complete at least one vehicle with all required information.');
-                isValid = false;
-            }
-            
-            // Validate at least one commodity has required info
-            const commodityEntries = document.querySelectorAll('.commodity-entry');
-            let hasValidCommodity = false;
-            let totalPercentage = 0;
-            
-            commodityEntries.forEach(entry => {
-                const commodityNum = entry.getAttribute('data-commodity');
-                const commodityType = entry.querySelector(`select[name="commodity_${commodityNum}_type"]`);
-                const commodityPercentage = entry.querySelector(`input[name="commodity_${commodityNum}_percentage"]`);
-                
-                const percentage = parseInt(commodityPercentage.value) || 0;
-                totalPercentage += percentage;
-                
-                if (commodityType.value && commodityPercentage.value) {
-                    hasValidCommodity = true;
-                } else if (commodityType.value || commodityPercentage.value) {
-                    // Partial info - mark required fields
-                    if (!commodityType.value) commodityType.style.borderColor = '#e74c3c';
-                    if (!commodityPercentage.value) commodityPercentage.style.borderColor = '#e74c3c';
-                    isValid = false;
-                }
-            });
-            
-            if (!hasValidCommodity) {
-                alert('Please complete at least one commodity with type and percentage.');
-                isValid = false;
-            }
-            
-            if (totalPercentage > 100) {
-                alert(`Total commodity percentages cannot exceed 100%. Current total: ${totalPercentage}%`);
-                isValid = false;
-            }
-            
-            return isValid;
+            // Generate PDF and send email
+            generatePDFAndSend();
         }
+        
+        // Setup event listeners for real-time updates
+        document.addEventListener('input', function(e) {
+            if (e.target.name && e.target.name.includes('commodity_') && e.target.name.includes('_percentage')) {
+                updatePercentageTotal();
+            }
+        });
     </script>
 </body>
 </html>

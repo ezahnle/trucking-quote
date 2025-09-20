@@ -407,6 +407,26 @@
             color: #721c24;
         }
         
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .success-message p {
+            color: #155724;
+            margin: 10px 0;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -463,6 +483,14 @@
         <div class="validation-summary" id="validationSummary">
             <h4>Please Complete Required Fields:</h4>
             <ul id="validationList"></ul>
+        </div>
+        
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <h3>Quote Successfully Submitted!</h3>
+            <p>Your quote has been submitted and saved to our system.</p>
+            <p>A document request email has been sent to your provided email address.</p>
+            <p>Ed Zahnle will contact you within 24 hours to discuss your quote.</p>
         </div>
         
         <form id="quoteForm" onsubmit="return false;" novalidate>
@@ -959,9 +987,6 @@
         
         <!-- Submit Button -->
         <div style="text-align: center; padding: 30px;">
-            <button type="button" class="btn-save" style="background: #e67e22; margin-right: 15px;" onclick="quickFillDemo()">
-                Fill Demo Data (Texas 2-Truck Account)
-            </button>
             <button type="button" class="btn-save" id="submitBtn" onclick="submitQuote()">
                 Generate Professional Quote PDF
                 <span class="loading-spinner" id="loadingSpinner">⟳</span>
@@ -1874,7 +1899,7 @@
             // Coverage details in table format
             doc.text(`Liability Limit`, 15, yPosition);
             if (formData.selectedCoverages && formData.selectedCoverages.includes('autoLiability')) {
-                const limit = formData.autoLiabilityLimit ? `${parseInt(formData.autoLiabilityLimit).toLocaleString()}` : '';
+                const limit = formData.autoLiabilityLimit ? `$${parseInt(formData.autoLiabilityLimit).toLocaleString()}` : '';
                 doc.text(limit, 50, yPosition);
             }
             doc.text(`Liability Ded.`, 85, yPosition);
@@ -1885,8 +1910,8 @@
             doc.text(`$100,000`, 25, yPosition);
             doc.text(`Physical Damage Ded.`, 50, yPosition);
             if (formData.selectedCoverages && formData.selectedCoverages.includes('physicalDamage')) {
-                const comp = formData.comprehensiveDeductible ? `${formData.comprehensiveDeductible}` : '';
-                const coll = formData.collisionDeductible ? `${formData.collisionDeductible}` : '';
+                const comp = formData.comprehensiveDeductible ? `$${formData.comprehensiveDeductible}` : '';
+                const coll = formData.collisionDeductible ? `$${formData.collisionDeductible}` : '';
                 doc.text(`${comp}/${coll}`, 85, yPosition);
             }
             doc.text(`(if any basis)`, 120, yPosition);
@@ -1894,11 +1919,11 @@
             yPosition += 5;
             doc.text(`Cargo Limit`, 15, yPosition);
             if (formData.selectedCoverages && formData.selectedCoverages.includes('cargoInsurance')) {
-                const cargoLimit = formData.cargoLimit ? `${parseInt(formData.cargoLimit).toLocaleString()}` : '';
+                const cargoLimit = formData.cargoLimit ? `$${parseInt(formData.cargoLimit).toLocaleString()}` : '';
                 doc.text(cargoLimit, 35, yPosition);
             }
             doc.text(`Cargo Ded.`, 70, yPosition);
-            const cargoDed = formData.cargoDeductible ? `${formData.cargoDeductible}` : '';
+            const cargoDed = formData.cargoDeductible ? `$${formData.cargoDeductible}` : '';
             doc.text(cargoDed, 90, yPosition);
             
             const reeferBreakdown = formData.reeferBreakdown === 'yes';
@@ -1946,6 +1971,58 @@
             
             yPosition += 15;
             
+            // Check if we need a new page
+            if (yPosition > 230) {
+                doc.addPage();
+                yPosition = 20;
+            }
+            
+            // Drivers section
+            doc.setFont(undefined, 'bold');
+            doc.text('Drivers:', 15, yPosition);
+            doc.setFont(undefined, 'normal');
+            yPosition += 8;
+            
+            // Driver table header
+            doc.setFontSize(8);
+            doc.text('#', 15, yPosition);
+            doc.text('Name', 25, yPosition);
+            doc.text('License #', 60, yPosition);
+            doc.text('DOB', 85, yPosition);
+            doc.text('Experience', 110, yPosition);
+            doc.text('Date Hired', 140, yPosition);
+            doc.text('SSN (Last 4)', 170, yPosition);
+            yPosition += 5;
+            
+            // Driver data
+            for (let i = 1; i <= driverCount; i++) {
+                if (formData[`driver_${i}_name`]) {
+                    // Check if we need a new page
+                    if (yPosition > 270) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    doc.text(`${i}`, 15, yPosition);
+                    const driverName = formData[`driver_${i}_name`] || '';
+                    doc.text(driverName.length > 15 ? driverName.substring(0, 15) + '...' : driverName, 25, yPosition);
+                    doc.text(`${formData[`driver_${i}_license`] || ''}`, 60, yPosition);
+                    
+                    const dob = formData[`driver_${i}_dob`];
+                    doc.text(dob ? new Date(dob).toLocaleDateString() : '', 85, yPosition);
+                    
+                    doc.text(`${formData[`driver_${i}_experience`] || ''}`, 110, yPosition);
+                    
+                    const doh = formData[`driver_${i}_doh`];
+                    doc.text(doh ? new Date(doh).toLocaleDateString() : '', 140, yPosition);
+                    
+                    doc.text(`${formData[`driver_${i}_ssn`] || ''}`, 170, yPosition);
+                    yPosition += 4;
+                }
+            }
+            
+            yPosition += 10;
+            
             // Vehicles section
             doc.setFont(undefined, 'bold');
             doc.text('Vehicles:', 15, yPosition);
@@ -1968,6 +2045,12 @@
             // Vehicle data
             for (let i = 1; i <= vehicleCount; i++) {
                 if (formData[`vehicle_${i}_year`]) {
+                    // Check if we need a new page
+                    if (yPosition > 270) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
                     doc.text(`${i}`, 15, yPosition);
                     doc.text(`${formData[`vehicle_${i}_year`] || ''}`, 25, yPosition);
                     doc.text(`${formData[`vehicle_${i}_make`] || ''}`, 40, yPosition);
@@ -1986,3 +2069,76 @@
                     yPosition += 4;
                 }
             }
+            
+            // Save the PDF
+            const filename = `${formData.businessName || 'Quote'}_${formData.quoteId}_${today.replace(/\//g, '-')}.pdf`;
+            doc.save(filename);
+            
+            return filename;
+        }
+        
+        async function submitQuote() {
+            console.log('Starting quote submission...');
+            
+            // Validate form first
+            if (!validateForm()) {
+                console.log('Form validation failed');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('loadingSpinner');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            spinner.style.display = 'inline';
+            submitBtn.innerHTML = 'Processing Quote... <span class="loading-spinner">⟳</span>';
+            
+            try {
+                // Collect form data
+                const formData = collectFormData();
+                console.log('Form data collected:', formData);
+                
+                // Submit to Google Sheets
+                const sheetsSuccess = await submitToGoogleSheets(formData);
+                if (!sheetsSuccess) {
+                    throw new Error('Failed to submit to Google Sheets');
+                }
+                
+                // Send document request email
+                const emailSuccess = await sendDocumentRequestEmail(formData);
+                if (!emailSuccess) {
+                    console.warn('Email sending failed, but continuing with PDF generation');
+                }
+                
+                // Generate and download PDF
+                const pdfFilename = generateProfessionalPDF(formData);
+                console.log('PDF generated:', pdfFilename);
+                
+                // Show success message
+                document.getElementById('validationSummary').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Update submission status
+                document.getElementById('submissionStatus').textContent = 'Successfully Submitted';
+                
+                console.log('Quote submission completed successfully');
+                
+            } catch (error) {
+                console.error('Error during quote submission:', error);
+                
+                // Show error message
+                alert('There was an error submitting your quote. Please try again or contact Ed Zahnle at (509) 215-3433.');
+                
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                spinner.style.display = 'none';
+                submitBtn.innerHTML = originalText;
+            }
+        }
+    </script>
+</body>
+</html>

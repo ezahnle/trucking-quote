@@ -1,13 +1,9 @@
-<!DOCTYPE html>
+        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional trucking insurance quote application by Ed Zahnle - Network TruckInsurance Services">
-    <meta name="keywords" content="trucking insurance, commercial truck insurance, Ed Zahnle, California trucking insurance">
-    <meta name="author" content="Ed Zahnle - Network TruckInsurance Services">
-    <title>Network TruckInsurance Services - Professional Quote Application</title>
-    <link rel="canonical" href="https://yourusername.github.io/your-repo-name/">
+    <title>Trucking Insurance Quote Form - Internal Use</title>
     
     <style>
         * {
@@ -55,22 +51,7 @@
             margin-top: 20px;
         }
         
-        .debug-panel {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 15px;
-            margin: 20px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 12px;
-            display: none;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .debug-panel.show {
-            display: block;
-        }
+
         
         .progress-bar {
             background: #e9ecef;
@@ -201,12 +182,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 14px;
-        }
-        
-        .btn-debug {
-            background: #f39c12;
-            color: white;
-            margin-left: 10px;
         }
         
         .btn-save {
@@ -345,21 +320,11 @@
             .container {
                 box-shadow: none;
             }
-            
-            .debug-panel {
-                display: none !important;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Debug Panel -->
-        <div class="debug-panel" id="debugPanel">
-            <strong>DEBUG LOG:</strong><br>
-            <div id="debugLog">Debugging enabled...</div>
-        </div>
-        
         <!-- Header -->
         <div class="header">
             <h1>Network TruckInsurance Services, Inc.</h1>
@@ -370,7 +335,6 @@
             <div class="subtitle">
                 <h2>Professional Insurance Quote Application</h2>
                 <p>Complete Commercial Trucking Insurance Solutions</p>
-                <button type="button" class="btn btn-debug" onclick="toggleDebug()">Toggle Debug</button>
             </div>
         </div>
         
@@ -570,9 +534,6 @@
                 Generate Professional Quote PDF
                 <span class="loading-spinner" id="loadingSpinner">⟳</span>
             </button>
-            <button type="button" class="btn btn-debug" onclick="testConnection()" style="margin-left: 10px;">
-                Test Connection
-            </button>
         </div>
     </div>
     
@@ -583,31 +544,10 @@
         // Your deployed Google Apps Script URL
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrcWAKtm8dDicdDNRToxyaR1YKzFHHBan-tJww4fNT9ZkDfHBZEXHdC14CChFMGexY/exec';
         
-        // Debug functionality
-        let debugMode = false;
-        
-        function toggleDebug() {
-            debugMode = !debugMode;
-            const debugPanel = document.getElementById('debugPanel');
-            debugPanel.classList.toggle('show', debugMode);
-            debugLog('Debug mode ' + (debugMode ? 'enabled' : 'disabled'));
-        }
-        
-        function debugLog(message) {
-            if (debugMode) {
-                const debugLogElement = document.getElementById('debugLog');
-                const timestamp = new Date().toLocaleTimeString();
-                debugLogElement.innerHTML += `<br>[${timestamp}] ${message}`;
-                console.log(`[DEBUG] ${message}`);
-            }
-        }
-        
         // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('Application initializing...');
             initializeQuote();
             setupEventListeners();
-            debugLog('Application initialized successfully');
         });
         
         function initializeQuote() {
@@ -620,12 +560,9 @@
             
             document.getElementById('quoteId').textContent = 'Enter USDOT number';
             document.getElementById('quoteDate').textContent = dateString;
-            debugLog('Quote initialized with date: ' + dateString);
         }
         
         function setupEventListeners() {
-            debugLog('Setting up event listeners...');
-            
             // Update summary on changes
             document.getElementById('businessName').addEventListener('input', function() {
                 document.getElementById('summaryBusinessName').textContent = this.value || 'Not entered';
@@ -638,59 +575,16 @@
             document.getElementById('usdotNumber').addEventListener('input', function() {
                 updateQuoteId();
             });
-            
-            debugLog('Event listeners set up successfully');
         }
         
         function updateQuoteId() {
             const usdotNumber = document.getElementById('usdotNumber').value;
             const quoteId = usdotNumber ? `DOT-${usdotNumber}` : 'Enter USDOT number';
             document.getElementById('quoteId').textContent = quoteId;
-            debugLog('Quote ID updated to: ' + quoteId);
             return quoteId;
         }
         
-        async function testConnection() {
-            debugLog('Testing connection to Google Apps Script...');
-            
-            const testData = {
-                businessName: 'Test Company',
-                contactName: 'Test Contact',
-                phoneNumber: '555-123-4567',
-                emailAddress: 'test@example.com',
-                usdotNumber: '123456',
-                mcNumber: 'MC-123456',
-                agencyNumber: 'TEST-001',
-                test: true
-            };
-            
-            try {
-                debugLog('Sending test data to: ' + GOOGLE_SCRIPT_URL);
-                
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(testData),
-                    mode: 'no-cors'
-                });
-                
-                debugLog('Response status: ' + response.status);
-                
-                // Note: no-cors mode means we can't read the response
-                alert('✅ Connection test sent successfully!\nCheck your Google Sheets for test data.');
-                document.getElementById('submissionStatus').textContent = 'Connection Test Sent';
-                
-            } catch (error) {
-                debugLog('Connection test error: ' + error.message);
-                alert('❌ Connection test failed:\n' + error.message);
-            }
-        }
-        
         function collectFormData() {
-            debugLog('Collecting form data...');
-            
             const formData = {
                 // Basic business info
                 businessName: document.getElementById('businessName').value,
@@ -718,7 +612,6 @@
                 routesOfTravel: 'Western United States' // Default
             };
             
-            debugLog('Form data collected: ' + JSON.stringify(formData, null, 2));
             return formData;
         }
         
@@ -738,8 +631,6 @@
                 }
             });
             
-            debugLog('Validation errors: ' + JSON.stringify(errors));
-            
             if (errors.length > 0) {
                 const validationSummary = document.getElementById('validationSummary');
                 const validationList = document.getElementById('validationList');
@@ -755,11 +646,8 @@
         }
         
         async function submitQuote() {
-            debugLog('Starting quote submission...');
-            
             // Basic validation
             if (!validateBasicForm()) {
-                debugLog('Form validation failed');
                 return;
             }
             
@@ -777,11 +665,12 @@
                 const formData = collectFormData();
                 
                 // Submit to Google Sheets
-                debugLog('Submitting to Google Sheets...');
                 await submitToGoogleSheets(formData);
                 
+                // Send document request email
+                await sendDocumentRequestEmail(formData);
+                
                 // Generate PDF
-                debugLog('Generating PDF...');
                 const pdfFilename = generateSimplePDF(formData);
                 
                 // Show success message
@@ -791,11 +680,8 @@
                 // Update submission status
                 document.getElementById('submissionStatus').textContent = 'Successfully Submitted';
                 
-                debugLog('Quote submission completed successfully');
-                
             } catch (error) {
-                debugLog('Error during quote submission: ' + error.message);
-                alert('⚠️ There was an issue submitting your quote. Your data may have been saved to our system. Ed Zahnle will contact you at the provided phone number.');
+                alert('There was an issue submitting your quote. Your data may have been saved to our system. Ed Zahnle will contact you at the provided phone number.');
                 
             } finally {
                 // Reset button state
@@ -807,8 +693,6 @@
         
         async function submitToGoogleSheets(formData) {
             try {
-                debugLog('Sending data to Google Sheets: ' + GOOGLE_SCRIPT_URL);
-                
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -818,20 +702,125 @@
                     mode: 'no-cors'
                 });
                 
-                debugLog('Google Sheets request sent (no-cors mode)');
-                return true; // Assume success since we can't read the response
+                return true; // Assume success since we can't read the response in no-cors mode
                 
             } catch (error) {
-                debugLog('Google Sheets submission error: ' + error.message);
                 // Don't throw error - the data was likely sent successfully
                 return true;
             }
         }
         
+        async function sendDocumentRequestEmail(formData) {
+            try {
+                const emailData = {
+                    action: 'sendDocumentRequest',
+                    from: 'ed.zahnle@truckerinsurance.com',
+                    to: formData.emailAddress,
+                    cc: 'ed.zahnle@truckerinsurance.com',
+                    subject: `Document Request - Commercial Trucking Insurance Quote ${formData.quoteId}`,
+                    html: generateEmailHTML(formData)
+                };
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(emailData),
+                    mode: 'no-cors'
+                });
+                
+                return true; // Assume success
+                
+            } catch (error) {
+                // Don't throw error - email may have been sent
+                return true;
+            }
+        }
+        
+        function generateEmailHTML(formData) {
+            return `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 20px; text-align: center;">
+                        <h2>Network TruckInsurance Services, Inc.</h2>
+                        <p>Ed Zahnle - Licensed Agent/Broker<br>
+                        Phone: (509) 215-3433 | Email: ed.zahnle@truckerinsurance.com</p>
+                    </div>
+                    
+                    <div style="padding: 30px; background: white;">
+                        <p>Dear ${formData.contactName},</p>
+                        
+                        <p>Thank you for submitting your commercial trucking insurance quote request. I have received your application and am excited to help you secure competitive coverage for <strong>${formData.businessName}</strong>.</p>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-left: 4px solid #3498db; margin: 20px 0;">
+                            <h3 style="color: #2c3e50; margin-top: 0;">Quote Summary:</h3>
+                            <ul style="margin: 10px 0;">
+                                <li><strong>Quote ID:</strong> ${formData.quoteId}</li>
+                                <li><strong>Agency Number:</strong> ${formData.agencyNumber}</li>
+                                <li><strong>Business:</strong> ${formData.businessName}</li>
+                                <li><strong>USDOT:</strong> ${formData.usdotNumber}</li>
+                                <li><strong>MC Number:</strong> ${formData.mcNumber}</li>
+                                <li><strong>Contact:</strong> ${formData.contactName}</li>
+                                <li><strong>Phone:</strong> ${formData.phoneNumber}</li>
+                            </ul>
+                        </div>
+                        
+                        <p>To complete your quote package and provide you with accurate pricing from our top-rated carriers (Progressive, Sentry, BHHC), I will need the following documents:</p>
+                        
+                        <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h3 style="color: #856404; margin-top: 0;">📋 Required Documents:</h3>
+                            <ol style="color: #856404;">
+                                <li><strong>Loss Runs from your current/prior insurance carrier</strong> (last 5 years)
+                                    <br><small>• This shows your claims history and is required by all underwriters</small>
+                                </li>
+                                <li><strong>IFTA Reports</strong> (last 4 quarters)
+                                    <br><small>• Interstate Fuel Tax Agreement reports showing mileage by state</small>
+                                </li>
+                                <li><strong>Motor Vehicle Records (MVRs)</strong> - <em>We will handle ordering these directly</em>
+                                    <br><small>• No action needed from you on MVRs</small>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div style="background: #d4edda; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h3 style="color: #155724; margin-top: 0;">🚀 Need Help Getting Loss Runs?</h3>
+                            <p style="color: #155724; margin-bottom: 0;">Many carriers require written authorization to release loss runs to agents. <strong>I can create the official request documents for you and send them via Adobe Sign for electronic signature.</strong> This makes the process quick and ensures your current carrier has everything they need to release your loss run history.</p>
+                            
+                            <p style="color: #155724; margin-bottom: 0;"><strong>Just reply to this email and let me know if you'd like me to prepare the loss run request documents for Adobe Sign!</strong></p>
+                        </div>
+                        
+                        <h3 style="color: #2c3e50;">Next Steps:</h3>
+                        <ol>
+                            <li>Reply to this email with your IFTA reports (PDF format preferred)</li>
+                            <li>Contact your current insurance carrier to request loss runs, or let me help with Adobe Sign requests</li>
+                            <li>I'll order MVRs for all drivers once we receive the above documents</li>
+                            <li>Within 24-48 hours of receiving all documents, I'll present you with competitive quotes from multiple carriers</li>
+                        </ol>
+                        
+                        <div style="background: #e9ecef; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <p style="margin: 0; font-size: 14px;"><strong>Questions?</strong> Don't hesitate to call me directly at (509) 215-3433. I'm here to make this process as smooth as possible and ensure you get the best coverage at competitive rates.</p>
+                        </div>
+                        
+                        <p>Thank you for choosing Network TruckInsurance Services. I look forward to working with you!</p>
+                        
+                        <p>Best regards,<br>
+                        <strong>Ed Zahnle</strong><br>
+                        Licensed Insurance Agent/Broker<br>
+                        Network TruckInsurance Services, Inc.<br>
+                        Direct: (509) 215-3433<br>
+                        Email: ed.zahnle@truckerinsurance.com</p>
+                    </div>
+                    
+                    <div style="background: #2c3e50; color: white; padding: 15px; text-align: center; font-size: 12px;">
+                        <p style="margin: 0;">This email was sent regarding your commercial trucking insurance quote request ${formData.quoteId}.<br>
+                        Network TruckInsurance Services, Inc. | Licensed Agent Ed Zahnle</p>
+                    </div>
+                </div>
+            `;
+        }
+        
         function generateSimplePDF(formData) {
             try {
-                debugLog('Generating PDF...');
-                
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
@@ -889,11 +878,9 @@
                 const filename = `${formData.businessName.replace(/\s+/g, '_')}_Quote_${formData.quoteId}.pdf`;
                 doc.save(filename);
                 
-                debugLog('PDF generated successfully: ' + filename);
                 return filename;
                 
             } catch (error) {
-                debugLog('PDF generation error: ' + error.message);
                 throw new Error('PDF generation failed: ' + error.message);
             }
         }

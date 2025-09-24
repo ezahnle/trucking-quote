@@ -1,8 +1,4 @@
-.btn-debug {
-            background: #f39c12;
-            color: white;
-            margin-left: 10px;
-        }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -186,6 +182,117 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 14px;
+        }
+        
+        .btn-add {
+            background: #27ae60;
+            color: white;
+            margin-top: 20px;
+        }
+        
+        .btn-add:hover {
+            background: #219a52;
+            transform: translateY(-1px);
+        }
+        
+        .btn-remove {
+            background: #e74c3c;
+            color: white;
+            margin-top: 15px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+        
+        .btn-remove:hover {
+            background: #c0392b;
+        }
+        
+        .entry-container {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            background: #fdfdfd;
+            position: relative;
+        }
+        
+        .entry-header {
+            color: #3498db;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .coverage-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .coverage-item {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fdfdfd;
+            transition: all 0.2s ease;
+        }
+        
+        .coverage-item.selected {
+            border-color: #3498db;
+            background: #f8fbff;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+        }
+        
+        .coverage-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .coverage-header input[type="checkbox"] {
+            transform: scale(1.4);
+        }
+        
+        .coverage-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        .coverage-details {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .percentage-tracker {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 6px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .percentage-tracker.complete {
+            background: #d4edda;
+            border-color: #27ae60;
+            color: #155724;
+        }
+        
+        .percentage-tracker.over {
+            background: #f8d7da;
+            border-color: #e74c3c;
+            color: #721c24;
         }
         
         .btn-save {
@@ -424,6 +531,25 @@
                             <div class="error-message">Complete mailing address is required</div>
                         </div>
                         
+                        <div class="form-group full-width">
+                            <div style="margin-bottom: 15px;">
+                                <input type="checkbox" id="sameAsBusinessAddress" onchange="toggleGarageAddress()">
+                                <label for="sameAsBusinessAddress">Garage address same as mailing address</label>
+                            </div>
+                            <div id="garageAddressSection">
+                                <label for="garageAddress">Garage Address <span class="required">*</span></label>
+                                <input type="text" id="garageAddress" name="garageAddress" required 
+                                       placeholder="Street Address" style="margin-bottom: 10px;">
+                                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px;">
+                                    <input type="text" id="garageCity" name="garageCity" required placeholder="City">
+                                    <input type="text" id="garageState" name="garageState" required placeholder="State">
+                                    <input type="text" id="garageZip" name="garageZip" required placeholder="ZIP Code">
+                                </div>
+                                <div class="error-message">Garage address is required</div>
+                                <div class="notes">Where vehicles are parked overnight</div>
+                            </div>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="businessType">Business Type <span class="required">*</span></label>
                             <select id="businessType" name="businessType" required>
@@ -499,6 +625,142 @@
                             <input type="text" id="priorYearReceipts" name="priorYearReceipts" 
                                    placeholder="$450,000">
                             <div class="notes">Previous year actual</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 2: Driver Information -->
+            <div class="section">
+                <div class="section-header">
+                    <span>2. Driver Information</span>
+                    <span class="section-status" id="section2Status">Incomplete</span>
+                </div>
+                <div class="section-content">
+                    <div id="driversContainer">
+                        <!-- Driver entries will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-add" onclick="addDriver()">+ Add Driver</button>
+                </div>
+            </div>
+            
+            <!-- Section 3: Vehicle Information -->
+            <div class="section">
+                <div class="section-header">
+                    <span>3. Vehicle & Equipment Details</span>
+                    <span class="section-status" id="section3Status">Incomplete</span>
+                </div>
+                <div class="section-content">
+                    <div id="vehiclesContainer">
+                        <!-- Vehicle entries will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-add" onclick="addVehicle()">+ Add Vehicle</button>
+                </div>
+            </div>
+            
+            <!-- Section 4: Coverage Requirements -->
+            <div class="section">
+                <div class="section-header">
+                    <span>4. Insurance Coverage Requirements</span>
+                    <span class="section-status" id="section4Status">Incomplete</span>
+                </div>
+                <div class="section-content">
+                    <div id="coveragesContainer">
+                        <!-- Coverage options will be populated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 5: Commodity Information -->
+            <div class="section">
+                <div class="section-header">
+                    <span>5. Commodity & Cargo Information</span>
+                    <span class="section-status" id="section5Status">Incomplete</span>
+                </div>
+                <div class="section-content">
+                    <div class="form-grid" style="margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label for="routesOfTravel">Routes of Travel <span class="required">*</span></label>
+                            <textarea id="routesOfTravel" name="routesOfTravel" required rows="2" 
+                                      placeholder="Major cities and regions served (e.g., Los Angeles, Las Vegas, Phoenix)"></textarea>
+                            <div class="error-message">Routes of travel is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="exclusiveHaul" name="exclusiveHaul" value="yes" onchange="toggleExclusiveHaulDetails()">
+                                <label for="exclusiveHaul">Exclusive haul?</label>
+                            </div>
+                            <div id="exclusiveHaulDetails" style="display: none; margin-top: 10px;">
+                                <input type="text" id="exclusiveHaulFor" name="exclusiveHaulFor" placeholder="Company name and years">
+                                <div class="notes">If yes, for whom and how many years?</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="hazmatHaul" name="hazmatHaul" value="yes" onchange="toggleHazmatDetails()">
+                                <label for="hazmatHaul">Hauling hazardous materials?</label>
+                            </div>
+                            <div id="hazmatDetails" style="display: none; margin-top: 10px;">
+                                <textarea id="hazmatTypes" name="hazmatTypes" rows="2" placeholder="List hazmat classes and materials"></textarea>
+                                <div class="notes">Please specify hazmat classes and materials</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="commoditiesContainer">
+                        <!-- Commodity entries will be added here -->
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <button type="button" class="btn btn-add" onclick="addCommodity()">+ Add Commodity</button>
+                        <div class="percentage-tracker" id="percentageTracker">Total: 0%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 6: Loss History -->
+            <div class="section">
+                <div class="section-header">
+                    <span>6. Loss History & Claims</span>
+                    <span class="section-status" id="section6Status">Complete</span>
+                </div>
+                <div class="section-content">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="priorCarrier">Current/Prior Insurance Carrier</label>
+                            <input type="text" id="priorCarrier" name="priorCarrier" 
+                                   placeholder="Insurance company name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="policyNumber">Policy Number</label>
+                            <input type="text" id="policyNumber" name="policyNumber" 
+                                   placeholder="Current policy number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="claimsLast5Years">Claims in Last 5 Years</label>
+                            <select id="claimsLast5Years" name="claimsLast5Years">
+                                <option value="0">No claims</option>
+                                <option value="1">1 claim</option>
+                                <option value="2">2 claims</option>
+                                <option value="3">3 claims</option>
+                                <option value="4+">4 or more claims</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="totalPaidOut">Total Paid Out</label>
+                            <input type="text" id="totalPaidOut" name="totalPaidOut" 
+                                   placeholder="$0">
+                            <div class="notes">Total amount paid on all claims</div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="claimsDescription">Claims Description (if applicable)</label>
+                            <textarea id="claimsDescription" name="claimsDescription" rows="3" 
+                                      placeholder="Brief description of any claims with dates..."></textarea>
                         </div>
                     </div>
                 </div>

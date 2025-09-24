@@ -51,8 +51,6 @@
             margin-top: 20px;
         }
         
-
-        
         .progress-bar {
             background: #e9ecef;
             height: 6px;
@@ -665,8 +663,162 @@
                     <span class="section-status" id="section4Status">Incomplete</span>
                 </div>
                 <div class="section-content">
-                    <div id="coveragesContainer">
-                        <!-- Coverage options will be populated here -->
+                    <div class="coverage-grid">
+                        <!-- Primary Liability Coverage -->
+                        <div class="coverage-item selected" id="liabilityCoverage">
+                            <div class="coverage-header">
+                                <input type="checkbox" id="liability" name="coverage" value="liability" checked onclick="toggleCoverageDetails('liability')">
+                                <div class="coverage-title">Auto Liability (Required)</div>
+                            </div>
+                            <div class="coverage-details" id="liabilityDetails" style="display: grid;">
+                                <div class="form-group">
+                                    <label for="liabilityLimit">Liability Limit <span class="required">*</span></label>
+                                    <select id="liabilityLimit" name="liabilityLimit" required>
+                                        <option value="$750,000">$750,000</option>
+                                        <option value="$1,000,000" selected>$1,000,000</option>
+                                        <option value="$1,500,000">$1,500,000</option>
+                                        <option value="$2,000,000">$2,000,000</option>
+                                        <option value="$5,000,000">$5,000,000</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="liabilityDeductible">Liability Deductible</label>
+                                    <select id="liabilityDeductible" name="liabilityDeductible">
+                                        <option value="$0" selected>$0</option>
+                                        <option value="$500">$500</option>
+                                        <option value="$1,000">$1,000</option>
+                                        <option value="$2,500">$2,500</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cargo Coverage -->
+                        <div class="coverage-item" id="cargoCoverage">
+                            <div class="coverage-header">
+                                <input type="checkbox" id="cargo" name="coverage" value="cargo" onclick="toggleCoverageDetails('cargo')">
+                                <div class="coverage-title">Cargo Insurance</div>
+                            </div>
+                            <div class="coverage-details" id="cargoDetails">
+                                <div class="form-group">
+                                    <label for="cargoLimit">Cargo Limit</label>
+                                    <select id="cargoLimit" name="cargoLimit">
+                                        <option value="$50,000">$50,000</option>
+                                        <option value="$100,000" selected>$100,000</option>
+                                        <option value="$150,000">$150,000</option>
+                                        <option value="$200,000">$200,000</option>
+                                        <option value="$250,000">$250,000</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cargoDeductible">Cargo Deductible</label>
+                                    <select id="cargoDeductible" name="cargoDeductible">
+                                        <option value="$500">$500</option>
+                                        <option value="$1,000" selected>$1,000</option>
+                                        <option value="$2,500">$2,500</option>
+                                        <option value="$5,000">$5,000</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Physical Damage -->
+                        <div class="coverage-item" id="physicalDamageCoverage">
+                            <div class="coverage-header">
+                                <input type="checkbox" id="physicalDamage" name="coverage" value="physicalDamage" onclick="toggleCoverageDetails('physicalDamage')">
+                                <div class="coverage-title">Physical Damage</div>
+                            </div>
+                            <div class="coverage-details" id="physicalDamageDetails">
+                                <div class="form-group">
+                                    <label for="physicalDamageDeductible">Physical Damage Deductible</label>
+                                    <select id="physicalDamageDeductible" name="physicalDamageDeductible">
+                                        <option value="$1,000" selected>$1,000</option>
+                                        <option value="$2,500">$2,500</option>
+                                        <option value="$5,000">$5,000</option>
+                                        <option value="$10,000">$10,000</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div style="margin-top: 15px;">
+                                        <input type="checkbox" id="comprehensiveCollision" name="comprehensiveCollision">
+                                        <label for="comprehensiveCollision">Comprehensive & Collision</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- General Liability -->
+                        <div class="coverage-item" id="generalLiabilityCoverage">
+                            <div class="coverage-header">
+                                <input type="checkbox" id="generalLiability" name="coverage" value="generalLiability" onclick="toggleCoverageDetails('generalLiability')">
+                                <div class="coverage-title">General Liability</div>
+                            </div>
+                            <div class="coverage-details" id="generalLiabilityDetails">
+                                <div class="form-group">
+                                    <label for="generalLiabilityLimit">General Liability Limit</label>
+                                    <select id="generalLiabilityLimit" name="generalLiabilityLimit">
+                                        <option value="$1M/$2M" selected>$1M/$2M</option>
+                                        <option value="$2M/$4M">$2M/$4M</option>
+                                        <option value="$1M/$3M">$1M/$3M</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="generalLiabilityDeductible">G.L. Deductible</label>
+                                    <select id="generalLiabilityDeductible" name="generalLiabilityDeductible">
+                                        <option value="$0" selected>$0</option>
+                                        <option value="$500">$500</option>
+                                        <option value="$1,000">$1,000</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trailer Interchange -->
+                        <div class="coverage-item" id="trailerInterchangeCoverage">
+                            <div class="coverage-header">
+                                <input type="checkbox" id="trailerInterchange" name="coverage" value="trailerInterchange" onclick="toggleCoverageDetails('trailerInterchange')">
+                                <div class="coverage-title">Trailer Interchange</div>
+                            </div>
+                            <div class="coverage-details" id="trailerInterchangeDetails">
+                                <div class="form-group">
+                                    <label for="trailerInterchangeLimit">Trailer Interchange Limit</label>
+                                    <select id="trailerInterchangeLimit" name="trailerInterchangeLimit">
+                                        <option value="$25,000">$25,000</option>
+                                        <option value="$35,000" selected>$35,000</option>
+                                        <option value="$50,000">$50,000</option>
+                                        <option value="$75,000">$75,000</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Coverages -->
+                        <div class="coverage-item" id="additionalCoveragesCoverage">
+                            <div class="coverage-header">
+                                <input type="checkbox" id="additionalCoverages" name="coverage" value="additionalCoverages" onclick="toggleCoverageDetails('additionalCoverages')">
+                                <div class="coverage-title">Additional Coverages</div>
+                            </div>
+                            <div class="coverage-details" id="additionalCoveragesDetails">
+                                <div class="form-group">
+                                    <div style="margin-bottom: 10px;">
+                                        <input type="checkbox" id="uninsuredMotorist" name="uninsuredMotorist">
+                                        <label for="uninsuredMotorist">Uninsured Motorist ($100,000)</label>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <input type="checkbox" id="hiredNonOwned" name="hiredNonOwned">
+                                        <label for="hiredNonOwned">Hired & Non-Owned Auto</label>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <input type="checkbox" id="reeferBreakdown" name="reeferBreakdown">
+                                        <label for="reeferBreakdown">Reefer Breakdown Coverage</label>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <input type="checkbox" id="loadingUnloading" name="loadingUnloading">
+                                        <label for="loadingUnloading">Loading/Unloading Coverage</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -710,10 +862,114 @@
                     </div>
                     
                     <div id="commoditiesContainer">
-                        <!-- Commodity entries will be added here -->
+                        <!-- Initial commodity entry -->
+                        <div class="entry-container" id="commodity1">
+                            <div class="entry-header">
+                                Commodity Type #1
+                                <button type="button" class="btn-remove" onclick="removeCommodity(1)" style="display: none;">Remove</button>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="commodityType1">Freight Type <span class="required">*</span></label>
+                                    <select id="commodityType1" name="commodityType1" required onchange="updateCommodityDetails(1)">
+                                        <option value="">Select freight type...</option>
+                                        <optgroup label="General Freight">
+                                            <option value="Dry Van General">Dry Van - General Freight</option>
+                                            <option value="Building Materials">Building Materials</option>
+                                            <option value="Electronics">Electronics & Technology</option>
+                                            <option value="Retail Goods">Retail Goods & Consumer Products</option>
+                                            <option value="Automotive Parts">Automotive Parts & Equipment</option>
+                                            <option value="Machinery">Machinery & Industrial Equipment</option>
+                                        </optgroup>
+                                        <optgroup label="Food & Beverage">
+                                            <option value="Fresh Produce">Fresh Produce</option>
+                                            <option value="Frozen Meat">Frozen Meat & Poultry</option>
+                                            <option value="Frozen Foods">Frozen Foods</option>
+                                            <option value="Dairy Products">Dairy Products</option>
+                                            <option value="Beverages">Beverages</option>
+                                            <option value="Dry Food">Dry Food & Packaged Goods</option>
+                                        </optgroup>
+                                        <optgroup label="Specialized">
+                                            <option value="Pharmaceuticals">Pharmaceuticals</option>
+                                            <option value="Chemicals">Chemicals (Non-Hazmat)</option>
+                                            <option value="Paper Products">Paper Products</option>
+                                            <option value="Textiles">Textiles & Clothing</option>
+                                            <option value="Furniture">Furniture & Home Goods</option>
+                                        </optgroup>
+                                        <optgroup label="Construction & Industrial">
+                                            <option value="Steel">Steel & Metal Products</option>
+                                            <option value="Lumber">Lumber & Wood Products</option>
+                                            <option value="Concrete">Concrete & Cement</option>
+                                            <option value="Aggregate">Sand, Gravel & Aggregate</option>
+                                        </optgroup>
+                                        <optgroup label="Energy">
+                                            <option value="Petroleum">Petroleum Products</option>
+                                            <option value="Oil Field">Oil Field Equipment</option>
+                                            <option value="Wind Energy">Wind Energy Equipment</option>
+                                        </optgroup>
+                                    </select>
+                                    <div class="error-message">Please select a freight type</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="commodityPercentage1">Percentage <span class="required">*</span></label>
+                                    <select id="commodityPercentage1" name="commodityPercentage1" required onchange="updatePercentageTracker()">
+                                        <option value="">Select percentage...</option>
+                                        <option value="5">5%</option>
+                                        <option value="10">10%</option>
+                                        <option value="15">15%</option>
+                                        <option value="20">20%</option>
+                                        <option value="25">25%</option>
+                                        <option value="30">30%</option>
+                                        <option value="35">35%</option>
+                                        <option value="40">40%</option>
+                                        <option value="45">45%</option>
+                                        <option value="50">50%</option>
+                                        <option value="55">55%</option>
+                                        <option value="60">60%</option>
+                                        <option value="65">65%</option>
+                                        <option value="70">70%</option>
+                                        <option value="75">75%</option>
+                                        <option value="80">80%</option>
+                                        <option value="85">85%</option>
+                                        <option value="90">90%</option>
+                                        <option value="95">95%</option>
+                                        <option value="100">100%</option>
+                                    </select>
+                                    <div class="error-message">Please select percentage</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="trailerType1">Trailer Type</label>
+                                    <select id="trailerType1" name="trailerType1">
+                                        <option value="Dry Van">Dry Van</option>
+                                        <option value="Reefer">Refrigerated Trailer</option>
+                                        <option value="Flatbed">Flatbed</option>
+                                        <option value="Step Deck">Step Deck</option>
+                                        <option value="Lowboy">Lowboy</option>
+                                        <option value="Tanker">Tanker</option>
+                                        <option value="Dump">Dump Trailer</option>
+                                        <option value="Auto Hauler">Auto Hauler</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="avgValue1">Average Load Value</label>
+                                    <input type="text" id="avgValue1" name="avgValue1" placeholder="$50,000">
+                                    <div class="notes">Average value per load</div>
+                                </div>
+                                
+                                <div class="form-group full-width" id="specialRequirements1" style="display: none;">
+                                    <label for="specialNotes1">Special Requirements</label>
+                                    <textarea id="specialNotes1" name="specialNotes1" rows="2" 
+                                              placeholder="Temperature requirements, handling instructions, etc."></textarea>
+                                    <div class="notes">Special handling or temperature requirements for this commodity</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-                        <button type="button" class="btn btn-add" onclick="addCommodity()">+ Add Commodity</button>
+                        <button type="button" class="btn btn-add" onclick="addCommodity()">+ Add Another Commodity</button>
                         <div class="percentage-tracker" id="percentageTracker">Total: 0%</div>
                     </div>
                 </div>
@@ -807,6 +1063,193 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
     
     <script>
+        let commodityCount = 1;
+        
+        function toggleCoverageDetails(coverageId) {
+            const checkbox = document.getElementById(coverageId);
+            const details = document.getElementById(coverageId + 'Details');
+            const container = document.getElementById(coverageId + 'Coverage');
+            
+            if (checkbox.checked) {
+                details.style.display = 'grid';
+                container.classList.add('selected');
+            } else {
+                details.style.display = 'none';
+                container.classList.remove('selected');
+            }
+        }
+        
+        function updateCommodityDetails(commodityNum) {
+            const commodityType = document.getElementById(`commodityType${commodityNum}`).value;
+            const specialRequirements = document.getElementById(`specialRequirements${commodityNum}`);
+            const trailerType = document.getElementById(`trailerType${commodityNum}`);
+            
+            // Show special requirements for temperature-sensitive commodities
+            const temperatureSensitive = ['Fresh Produce', 'Frozen Meat', 'Frozen Foods', 'Dairy Products', 'Pharmaceuticals'];
+            if (temperatureSensitive.includes(commodityType)) {
+                specialRequirements.style.display = 'block';
+                trailerType.value = 'Reefer'; // Auto-select refrigerated trailer
+            } else {
+                specialRequirements.style.display = 'none';
+            }
+        }
+        
+        function addCommodity() {
+            commodityCount++;
+            const container = document.getElementById('commoditiesContainer');
+            
+            const commodityHTML = `
+                <div class="entry-container" id="commodity${commodityCount}">
+                    <div class="entry-header">
+                        Commodity Type #${commodityCount}
+                        <button type="button" class="btn-remove" onclick="removeCommodity(${commodityCount})">Remove</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="commodityType${commodityCount}">Freight Type <span class="required">*</span></label>
+                            <select id="commodityType${commodityCount}" name="commodityType${commodityCount}" required onchange="updateCommodityDetails(${commodityCount})">
+                                <option value="">Select freight type...</option>
+                                <optgroup label="General Freight">
+                                    <option value="Dry Van General">Dry Van - General Freight</option>
+                                    <option value="Building Materials">Building Materials</option>
+                                    <option value="Electronics">Electronics & Technology</option>
+                                    <option value="Retail Goods">Retail Goods & Consumer Products</option>
+                                    <option value="Automotive Parts">Automotive Parts & Equipment</option>
+                                    <option value="Machinery">Machinery & Industrial Equipment</option>
+                                </optgroup>
+                                <optgroup label="Food & Beverage">
+                                    <option value="Fresh Produce">Fresh Produce</option>
+                                    <option value="Frozen Meat">Frozen Meat & Poultry</option>
+                                    <option value="Frozen Foods">Frozen Foods</option>
+                                    <option value="Dairy Products">Dairy Products</option>
+                                    <option value="Beverages">Beverages</option>
+                                    <option value="Dry Food">Dry Food & Packaged Goods</option>
+                                </optgroup>
+                                <optgroup label="Specialized">
+                                    <option value="Pharmaceuticals">Pharmaceuticals</option>
+                                    <option value="Chemicals">Chemicals (Non-Hazmat)</option>
+                                    <option value="Paper Products">Paper Products</option>
+                                    <option value="Textiles">Textiles & Clothing</option>
+                                    <option value="Furniture">Furniture & Home Goods</option>
+                                </optgroup>
+                                <optgroup label="Construction & Industrial">
+                                    <option value="Steel">Steel & Metal Products</option>
+                                    <option value="Lumber">Lumber & Wood Products</option>
+                                    <option value="Concrete">Concrete & Cement</option>
+                                    <option value="Aggregate">Sand, Gravel & Aggregate</option>
+                                </optgroup>
+                                <optgroup label="Energy">
+                                    <option value="Petroleum">Petroleum Products</option>
+                                    <option value="Oil Field">Oil Field Equipment</option>
+                                    <option value="Wind Energy">Wind Energy Equipment</option>
+                                </optgroup>
+                            </select>
+                            <div class="error-message">Please select a freight type</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="commodityPercentage${commodityCount}">Percentage <span class="required">*</span></label>
+                            <select id="commodityPercentage${commodityCount}" name="commodityPercentage${commodityCount}" required onchange="updatePercentageTracker()">
+                                <option value="">Select percentage...</option>
+                                <option value="5">5%</option>
+                                <option value="10">10%</option>
+                                <option value="15">15%</option>
+                                <option value="20">20%</option>
+                                <option value="25">25%</option>
+                                <option value="30">30%</option>
+                                <option value="35">35%</option>
+                                <option value="40">40%</option>
+                                <option value="45">45%</option>
+                                <option value="50">50%</option>
+                                <option value="55">55%</option>
+                                <option value="60">60%</option>
+                                <option value="65">65%</option>
+                                <option value="70">70%</option>
+                                <option value="75">75%</option>
+                                <option value="80">80%</option>
+                                <option value="85">85%</option>
+                                <option value="90">90%</option>
+                                <option value="95">95%</option>
+                                <option value="100">100%</option>
+                            </select>
+                            <div class="error-message">Please select percentage</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trailerType${commodityCount}">Trailer Type</label>
+                            <select id="trailerType${commodityCount}" name="trailerType${commodityCount}">
+                                <option value="Dry Van">Dry Van</option>
+                                <option value="Reefer">Refrigerated Trailer</option>
+                                <option value="Flatbed">Flatbed</option>
+                                <option value="Step Deck">Step Deck</option>
+                                <option value="Lowboy">Lowboy</option>
+                                <option value="Tanker">Tanker</option>
+                                <option value="Dump">Dump Trailer</option>
+                                <option value="Auto Hauler">Auto Hauler</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="avgValue${commodityCount}">Average Load Value</label>
+                            <input type="text" id="avgValue${commodityCount}" name="avgValue${commodityCount}" placeholder="$50,000">
+                            <div class="notes">Average value per load</div>
+                        </div>
+                        
+                        <div class="form-group full-width" id="specialRequirements${commodityCount}" style="display: none;">
+                            <label for="specialNotes${commodityCount}">Special Requirements</label>
+                            <textarea id="specialNotes${commodityCount}" name="specialNotes${commodityCount}" rows="2" 
+                                      placeholder="Temperature requirements, handling instructions, etc."></textarea>
+                            <div class="notes">Special handling or temperature requirements for this commodity</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', commodityHTML);
+            
+            // Show remove button on first commodity if there's now more than one
+            if (commodityCount > 1) {
+                document.querySelector('#commodity1 .btn-remove').style.display = 'block';
+            }
+        }
+        
+        function removeCommodity(commodityNum) {
+            const element = document.getElementById(`commodity${commodityNum}`);
+            if (element) {
+                element.remove();
+                updatePercentageTracker();
+                
+                // Hide remove button on first commodity if it's the only one left
+                const remainingCommodities = document.querySelectorAll('[id^="commodity"]');
+                if (remainingCommodities.length === 1) {
+                    document.querySelector('#commodity1 .btn-remove').style.display = 'none';
+                }
+            }
+        }
+        
+        function updatePercentageTracker() {
+            let total = 0;
+            const percentageSelects = document.querySelectorAll('[id^="commodityPercentage"]');
+            
+            percentageSelects.forEach(select => {
+                if (select.value) {
+                    total += parseInt(select.value);
+                }
+            });
+            
+            const tracker = document.getElementById('percentageTracker');
+            tracker.textContent = `Total: ${total}%`;
+            
+            // Update styling based on total
+            if (total === 100) {
+                tracker.className = 'percentage-tracker complete';
+            } else if (total > 100) {
+                tracker.className = 'percentage-tracker over';
+            } else {
+                tracker.className = 'percentage-tracker';
+            }
+        }
+        
         // Your deployed Google Apps Script URL
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrcWAKtm8dDicdDNRToxyaR1YKzFHHBan-tJww4fNT9ZkDfHBZEXHdC14CChFMGexY/exec';
         
@@ -1131,832 +1574,7 @@
                 doc.rect(115, yPosition - 4, 35, 8);
                 doc.text('TBD', 117, yPosition);
                 
-                doc.text(`TARGET PRICE         .btn-debug {
-            background: #f39c12;
-            color: white;
-            margin-left: 10px;
-        }<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trucking Insurance Quote Form - Internal Use</title>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-        
-        .header .contact-info {
-            font-size: 16px;
-            opacity: 0.95;
-            margin: 15px 0;
-        }
-        
-        .header .subtitle {
-            border-top: 2px solid rgba(255,255,255,0.3);
-            padding-top: 20px;
-            margin-top: 20px;
-        }
-        
-
-        
-        .progress-bar {
-            background: #e9ecef;
-            height: 6px;
-            position: relative;
-        }
-        
-        .progress-fill {
-            background: linear-gradient(90deg, #27ae60, #2ecc71);
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .section {
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        .section:last-of-type {
-            border-bottom: none;
-        }
-        
-        .section-header {
-            background: #f8f9fa;
-            padding: 20px;
-            border-left: 5px solid #3498db;
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .section-status {
-            font-size: 14px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background: #e9ecef;
-            color: #6c757d;
-        }
-        
-        .section-status.complete {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .section-status.partial {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .section-content {
-            padding: 30px;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        label {
-            font-weight: 600;
-            color: #495057;
-            font-size: 14px;
-        }
-        
-        input, select, textarea {
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-        
-        input.error, select.error, textarea.error {
-            border-color: #e74c3c;
-            background-color: #fdf2f2;
-        }
-        
-        input.valid, select.valid, textarea.valid {
-            border-color: #27ae60;
-            background-color: #f8fff9;
-        }
-        
-        .error-message {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 4px;
-            display: none;
-        }
-        
-        .notes {
-            font-size: 12px;
-            color: #6c757d;
-            font-style: italic;
-            margin-top: 4px;
-        }
-        
-        .required {
-            color: #e74c3c;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
-        }
-        
-        .btn-save {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 18px 40px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 30px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-        }
-        
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
-        }
-        
-        .btn-save:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .loading-spinner {
-            display: none;
-            margin-left: 10px;
-        }
-        
-        .validation-summary {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 6px;
-            padding: 15px;
-            margin: 20px 0;
-            display: none;
-        }
-        
-        .validation-summary h4 {
-            color: #721c24;
-            margin-bottom: 10px;
-        }
-        
-        .validation-summary ul {
-            margin-left: 20px;
-            color: #721c24;
-        }
-        
-        .success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 6px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            display: none;
-        }
-        
-        .success-message h3 {
-            color: #155724;
-            margin-bottom: 10px;
-        }
-        
-        .success-message p {
-            color: #155724;
-            margin: 10px 0;
-        }
-        
-        .quote-summary {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            padding: 25px;
-            margin: 20px 0;
-        }
-        
-        .summary-header {
-            color: #2c3e50;
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .summary-item {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 4px solid #3498db;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .summary-label {
-            font-weight: 600;
-            color: #495057;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .summary-value {
-            font-size: 16px;
-            color: #2c3e50;
-            margin-top: 5px;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 0;
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .section-content {
-                padding: 20px;
-            }
-        }
-        
-        @media print {
-            .btn, button {
-                display: none;
-            }
-            
-            .container {
-                box-shadow: none;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Network TruckInsurance Services, Inc.</h1>
-            <div class="contact-info">
-                <strong>Ed Zahnle - Licensed Agent/Broker</strong><br>
-                Phone: (509) 215-3433 | Email: ed.zahnle@truckerinsurance.com
-            </div>
-            <div class="subtitle">
-                <h2>Professional Insurance Quote Application</h2>
-                <p>Complete Commercial Trucking Insurance Solutions</p>
-            </div>
-        </div>
-        
-        <!-- Progress Bar -->
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-        
-        <!-- Validation Summary -->
-        <div class="validation-summary" id="validationSummary">
-            <h4>Please Complete Required Fields:</h4>
-            <ul id="validationList"></ul>
-        </div>
-        
-        <!-- Success Message -->
-        <div class="success-message" id="successMessage">
-            <h3>Quote Successfully Submitted!</h3>
-            <p>Your quote has been submitted and saved to our system.</p>
-            <p>A document request email has been sent to your provided email address.</p>
-            <p>Ed Zahnle will contact you within 24 hours to discuss your quote.</p>
-        </div>
-        
-        <form id="quoteForm" onsubmit="return false;" novalidate>
-            <!-- Section 1: Business Information -->
-            <div class="section">
-                <div class="section-header">
-                    <span>1. Business Information</span>
-                    <span class="section-status" id="section1Status">Incomplete</span>
-                </div>
-                <div class="section-content">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="businessName">Business Name <span class="required">*</span></label>
-                            <input type="text" id="businessName" name="businessName" required 
-                                   placeholder="Legal name of insured">
-                            <div class="error-message">Business name is required</div>
-                            <div class="notes">Legal business name as registered</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="dba">DBA (if different)</label>
-                            <input type="text" id="dba" name="dba" 
-                                   placeholder="Doing Business As name">
-                            <div class="notes">Operating name if different from legal name</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="contactName">Contact Name <span class="required">*</span></label>
-                            <input type="text" id="contactName" name="contactName" required 
-                                   placeholder="Primary contact person">
-                            <div class="error-message">Contact name is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phoneNumber">Phone Number <span class="required">*</span></label>
-                            <input type="tel" id="phoneNumber" name="phoneNumber" required 
-                                   placeholder="(555) 123-4567">
-                            <div class="error-message">Valid phone number is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="faxNumber">Fax Number</label>
-                            <input type="tel" id="faxNumber" name="faxNumber" 
-                                   placeholder="(555) 123-4567">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="emailAddress">Email Address <span class="required">*</span></label>
-                            <input type="email" id="emailAddress" name="emailAddress" required 
-                                   placeholder="contact@company.com">
-                            <div class="error-message">Valid email address is required</div>
-                        </div>
-                        
-                        <div class="form-group full-width">
-                            <label for="businessAddress">Mailing Address <span class="required">*</span></label>
-                            <input type="text" id="businessAddress" name="businessAddress" required 
-                                   placeholder="Street Address" style="margin-bottom: 10px;">
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px;">
-                                <input type="text" id="businessCity" name="businessCity" required placeholder="City">
-                                <input type="text" id="businessState" name="businessState" required placeholder="State">
-                                <input type="text" id="businessZip" name="businessZip" required placeholder="ZIP Code">
-                            </div>
-                            <div class="error-message">Complete mailing address is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="businessType">Business Type <span class="required">*</span></label>
-                            <select id="businessType" name="businessType" required>
-                                <option value="">Select business type...</option>
-                                <option value="Individual">Individual</option>
-                                <option value="Partnership">Partnership</option>
-                                <option value="Corporation">Corporation</option>
-                                <option value="LLC">LLC</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <div class="error-message">Business type is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="usdotNumber">USDOT Number <span class="required">*</span></label>
-                            <input type="text" id="usdotNumber" name="usdotNumber" required 
-                                   placeholder="1234567">
-                            <div class="error-message">USDOT number is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="mcNumber">MC Number <span class="required">*</span></label>
-                            <input type="text" id="mcNumber" name="mcNumber" required 
-                                   placeholder="MC-123456">
-                            <div class="error-message">MC number is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="stateNumber">State Number</label>
-                            <input type="text" id="stateNumber" name="stateNumber" 
-                                   placeholder="CA-123456, TX-12345, etc.">
-                            <div class="notes">State intrastate authority numbers</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="feinNumber">Federal EIN</label>
-                            <input type="text" id="feinNumber" name="feinNumber" 
-                                   placeholder="12-3456789">
-                            <div class="notes">Federal Employer Identification Number</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="agencyNumber">Agency Number <span class="required">*</span></label>
-                            <input type="text" id="agencyNumber" name="agencyNumber" required 
-                                   placeholder="NTI-2024-001">
-                            <div class="error-message">Agency number is required</div>
-                            <div class="notes">Internal agency tracking identifier</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="yearsInBusiness">Years in Business <span class="required">*</span></label>
-                            <select id="yearsInBusiness" name="yearsInBusiness" required>
-                                <option value="">Select years in business...</option>
-                                <option value="New Venture">New Venture</option>
-                                <option value="<1">Less than 1 year</option>
-                                <option value="1-3">1-3 years</option>
-                                <option value="4-7">4-7 years</option>
-                                <option value="8+">8+ years</option>
-                            </select>
-                            <div class="error-message">Years in business is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="grossReceipts">Annual Gross Receipts <span class="required">*</span></label>
-                            <input type="text" id="grossReceipts" name="grossReceipts" required 
-                                   placeholder="$500,000">
-                            <div class="error-message">Annual gross receipts required</div>
-                            <div class="notes">Current year estimated</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="priorYearReceipts">Prior Year Gross Receipts</label>
-                            <input type="text" id="priorYearReceipts" name="priorYearReceipts" 
-                                   placeholder="$450,000">
-                            <div class="notes">Previous year actual</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Quote Summary Section -->
-            <div class="quote-summary">
-                <div class="summary-header">Quote Summary</div>
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <div class="summary-label">Quote ID (USDOT)</div>
-                        <div class="summary-value" id="quoteId">Enter USDOT number</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">Date Created</div>
-                        <div class="summary-value" id="quoteDate">Loading...</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">Business Name</div>
-                        <div class="summary-value" id="summaryBusinessName">Not entered</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">Contact</div>
-                        <div class="summary-value" id="summaryContactName">Not entered</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">Submission Status</div>
-                        <div class="summary-value" id="submissionStatus">Ready to Test</div>
-                    </div>
-                </div>
-            </div>
-        </form>
-        
-        <!-- Submit Button -->
-        <div style="text-align: center; padding: 30px;">
-            <button type="button" class="btn-save" id="submitBtn" onclick="submitQuote()">
-                Generate Professional Quote PDF
-                <span class="loading-spinner" id="loadingSpinner">⟳</span>
-            </button>
-        </div>
-    </div>
-    
-    <!-- Load jsPDF from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
-    
-    <script>
-        // Your deployed Google Apps Script URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrcWAKtm8dDicdDNRToxyaR1YKzFHHBan-tJww4fNT9ZkDfHBZEXHdC14CChFMGexY/exec';
-        
-        // Initialize application
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeQuote();
-            setupEventListeners();
-        });
-        
-        function initializeQuote() {
-            const today = new Date();
-            const dateString = today.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            
-            document.getElementById('quoteId').textContent = 'Enter USDOT number';
-            document.getElementById('quoteDate').textContent = dateString;
-        }
-        
-        function setupEventListeners() {
-            // Update summary on changes
-            document.getElementById('businessName').addEventListener('input', function() {
-                document.getElementById('summaryBusinessName').textContent = this.value || 'Not entered';
-            });
-            
-            document.getElementById('contactName').addEventListener('input', function() {
-                document.getElementById('summaryContactName').textContent = this.value || 'Not entered';
-            });
-            
-            document.getElementById('usdotNumber').addEventListener('input', function() {
-                updateQuoteId();
-            });
-        }
-        
-        function updateQuoteId() {
-            const usdotNumber = document.getElementById('usdotNumber').value;
-            const quoteId = usdotNumber ? `DOT-${usdotNumber}` : 'Enter USDOT number';
-            document.getElementById('quoteId').textContent = quoteId;
-            return quoteId;
-        }
-        
-        function collectFormData() {
-            const formData = {
-                // Basic business info
-                businessName: document.getElementById('businessName').value,
-                contactName: document.getElementById('contactName').value,
-                phoneNumber: document.getElementById('phoneNumber').value,
-                emailAddress: document.getElementById('emailAddress').value,
-                businessAddress: document.getElementById('businessAddress').value,
-                businessCity: document.getElementById('businessCity').value,
-                businessState: document.getElementById('businessState').value,
-                businessZip: document.getElementById('businessZip').value,
-                businessType: document.getElementById('businessType').value,
-                usdotNumber: document.getElementById('usdotNumber').value,
-                mcNumber: document.getElementById('mcNumber').value,
-                agencyNumber: document.getElementById('agencyNumber').value,
-                yearsInBusiness: document.getElementById('yearsInBusiness').value,
-                grossReceipts: document.getElementById('grossReceipts').value,
-                priorYearReceipts: document.getElementById('priorYearReceipts').value,
-                
-                // Meta data
-                quoteId: updateQuoteId(),
-                submissionDate: new Date().toISOString(),
-                timestamp: Date.now(),
-                vehicleCount: 1, // Default for basic form
-                selectedCoverages: ['Auto Liability'], // Default
-                routesOfTravel: 'Western United States' // Default
-            };
-            
-            return formData;
-        }
-        
-        function validateBasicForm() {
-            const requiredFields = [
-                'businessName', 'contactName', 'phoneNumber', 'emailAddress',
-                'businessAddress', 'businessCity', 'businessState', 'businessZip',
-                'businessType', 'usdotNumber', 'mcNumber', 'agencyNumber', 'yearsInBusiness', 'grossReceipts'
-            ];
-            
-            const errors = [];
-            
-            requiredFields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (!field || !field.value.trim()) {
-                    errors.push(fieldId);
-                }
-            });
-            
-            if (errors.length > 0) {
-                const validationSummary = document.getElementById('validationSummary');
-                const validationList = document.getElementById('validationList');
-                
-                validationList.innerHTML = errors.map(error => `<li>${error.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</li>`).join('');
-                validationSummary.style.display = 'block';
-                validationSummary.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                return false;
-            }
-            
-            document.getElementById('validationSummary').style.display = 'none';
-            return true;
-        }
-        
-        async function submitQuote() {
-            // Basic validation
-            if (!validateBasicForm()) {
-                return;
-            }
-            
-            // Show loading state
-            const submitBtn = document.getElementById('submitBtn');
-            const spinner = document.getElementById('loadingSpinner');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.disabled = true;
-            spinner.style.display = 'inline';
-            submitBtn.innerHTML = 'Processing Quote... <span class="loading-spinner">⟳</span>';
-            
-            try {
-                // Collect form data
-                const formData = collectFormData();
-                
-                // Submit to Google Sheets
-                await submitToGoogleSheets(formData);
-                
-                // Send document request email
-                await sendDocumentRequestEmail(formData);
-                
-                // Generate PDF
-                const pdfFilename = generateSimplePDF(formData);
-                
-                // Show success message
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                
-                // Update submission status
-                document.getElementById('submissionStatus').textContent = 'Successfully Submitted';
-                
-            } catch (error) {
-                alert('There was an issue submitting your quote. Your data may have been saved to our system. Ed Zahnle will contact you at the provided phone number.');
-                
-            } finally {
-                // Reset button state
-                submitBtn.disabled = false;
-                spinner.style.display = 'none';
-                submitBtn.innerHTML = originalText;
-            }
-        }
-        
-        async function submitToGoogleSheets(formData) {
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                    mode: 'no-cors'
-                });
-                
-                return true; // Assume success since we can't read the response in no-cors mode
-                
-            } catch (error) {
-                // Don't throw error - the data was likely sent successfully
-                return true;
-            }
-        }
-        
-        async function sendDocumentRequestEmail(formData) {
-            try {
-                const emailData = {
-                    action: 'sendDocumentRequest',
-                    from: 'ed.zahnle@truckerinsurance.com',
-                    to: formData.emailAddress,
-                    cc: 'ed.zahnle@truckerinsurance.com',
-                    subject: `Document Request - Commercial Trucking Insurance Quote ${formData.quoteId}`,
-                    html: generateEmailHTML(formData)
-                };
-                
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(emailData),
-                    mode: 'no-cors'
-                });
-                
-                return true; // Assume success
-                
-            } catch (error) {
-                // Don't throw error - email may have been sent
-                return true;
-            }
-        }
-        
-        function generateEmailHTML(formData) {
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 20px; text-align: center;">
-                        <h2>Network TruckInsurance Services, Inc.</h2>
-                        <p>Ed Zahnle - Licensed Agent/Broker<br>
-                        Phone: (509) 215-3433 | Email: ed.zahnle@truckerinsurance.com</p>
-                    </div>
-                    
-                    <div style="padding: 30px; background: white;">
-                        <p>Dear ${formData.contactName},</p>
-                        
-                        <p>Thank you for submitting your commercial trucking insurance quote request. I have received your application and am excited to help you secure competitive coverage for <strong>${formData.businessName}</strong>.</p>
-                        
-                        <div style="background: #f8f9fa; padding: 20px; border-left: 4px solid #3498db; margin: 20px 0;">
-                            <h3 style="color: #2c3e50; margin-top: 0;">Quote Summary:</h3>
-                            <ul style="margin: 10px 0;">
-                                <li><strong>Quote ID:</strong> ${formData.quoteId}</li>
-                                <li><strong>Agency Number:</strong> ${formData.agencyNumber}</li>
-                                <li><strong>Business:</strong> ${formData.businessName}</li>
-                                <li><strong>USDOT:</strong> ${formData.usdotNumber}</li>
-                                <li><strong>MC Number:</strong> ${formData.mcNumber}</li>
-                                <li><strong>Contact:</strong> ${formData.contactName}</li>
-                                <li><strong>Phone:</strong> ${formData.phoneNumber}</li>
-                            </ul>
-                        </div>
-                        
-                        <p>To complete your quote package and provide you with accurate pricing from our top-rated carriers (Progressive, Sentry, BHHC), I will need the following documents:</p>
-                        
-                        <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                            <h3 style="color: #856404; margin-top: 0;">📋 Required Documents:</h3>
-                            <ol style="color: #856404;">
-                                <li><strong>Loss Runs from your current/prior insurance carrier</strong> (last 5 years)
-                                    <br><small>• This shows your claims history and is required by all underwriters</small>
-                                </li>
-                                <li><strong>IFTA Reports</strong> (last 4 quarters)
-                                    <br><small>• Interstate Fuel Tax Agreement reports showing mileage by state</small>
-                                </li>
-                                <li><strong>Motor Vehicle Records (MVRs)</strong> - <em>We will handle ordering these directly</em>
-                                    <br><small>• No action needed from you on MVRs</small>
-                                </li>
-                            </ol>
-                        </div>
-                        
-                        <div style="background: #d4edda; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                            <h3 style="color: #155724; margin-top: 0;">🚀 Need Help Getting Loss Runs?</h3>
-                            <p style="color: #155724; margin-bottom: 0;">Many carriers require written authorization to release loss runs to agents. <strong>I can create the official request documents for you and send them via Adobe Sign for electronic signature.</strong> This makes the process quick and ensures your current carrier has everything they need to release your loss run history.</p>
-                            
-                            <p style="color: #155724; margin-bottom: 0;"><strong>Just reply to this email and let me know if you'd like me to prepare the loss run request documents for Adobe Sign!</strong></p>
-                        </div>
-                        
-                        <h3 style="color: #2c3e50;">Next Steps:</h3>
-                        <ol>
-                            <li>Reply to this email with your IFTA reports (PDF format preferred)</li>
-                            <li>Contact your current insurance carrier to request loss runs, or let me help with Adobe Sign requests</li>
-                            <li>I'll order MVRs for all drivers once we receive the above documents</li>
-                            <li>Within 24-48 hours of receiving all documents, I'll present you with competitive quotes from multiple carriers</li>
-                        </ol>
-                        
-                        <div style="background: #e9ecef; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                            <p style="margin: 0; font-size: 14px;"><strong>Questions?</strong> Don't hesitate to call me directly at (509) 215-3433. I'm here to make this process as smooth as possible and ensure you get the best coverage at competitive rates.</p>
-                        </div>
-                        
-                        <p>Thank you for choosing Network TruckInsurance Services. I look forward to working with you!</p>
-                        
-                        <p>Best regards,<br>
-                        <strong>Ed Zahnle</strong><br>
-                        Licensed Insurance Agent/Broker<br>
-                        Network TruckInsurance Services, Inc.<br>
-                        Direct: (509) 215-3433<br>
-                        Email: ed.zahnle@truckerinsurance.com</p>
-                    </div>
-                    
-                    <div style="background: #2c3e50; color: white; padding: 15px; text-align: center; font-size: 12px;">
-                        <p style="margin: 0;">This email was sent regarding your commercial trucking insurance quote request ${formData.quoteId}.<br>
-                        Network TruckInsurance Services, Inc. | Licensed Agent Ed Zahnle</p>
-                    </div>
-                </div>
-            `;
-        }
-        
-, 155, yPosition);
+                doc.text(`TARGET PRICE         $`, 155, yPosition);
                 doc.rect(180, yPosition - 4, 15, 8);
                 
                 yPosition += 12;
@@ -2207,6 +1825,47 @@
                 
             } catch (error) {
                 throw new Error('PDF generation failed: ' + error.message);
+            }
+        }
+        
+        function toggleGarageAddress() {
+            const checkbox = document.getElementById('sameAsBusinessAddress');
+            const garageSection = document.getElementById('garageAddressSection');
+            
+            if (checkbox.checked) {
+                // Copy business address to garage address
+                document.getElementById('garageAddress').value = document.getElementById('businessAddress').value;
+                document.getElementById('garageCity').value = document.getElementById('businessCity').value;
+                document.getElementById('garageState').value = document.getElementById('businessState').value;
+                document.getElementById('garageZip').value = document.getElementById('businessZip').value;
+                
+                // Hide garage address inputs
+                garageSection.style.display = 'none';
+            } else {
+                // Show garage address inputs
+                garageSection.style.display = 'block';
+            }
+        }
+        
+        function toggleExclusiveHaulDetails() {
+            const checkbox = document.getElementById('exclusiveHaul');
+            const details = document.getElementById('exclusiveHaulDetails');
+            
+            if (checkbox.checked) {
+                details.style.display = 'block';
+            } else {
+                details.style.display = 'none';
+            }
+        }
+        
+        function toggleHazmatDetails() {
+            const checkbox = document.getElementById('hazmatHaul');
+            const details = document.getElementById('hazmatDetails');
+            
+            if (checkbox.checked) {
+                details.style.display = 'block';
+            } else {
+                details.style.display = 'none';
             }
         }
     </script>

@@ -1064,6 +1064,238 @@
     
     <script>
         let commodityCount = 1;
+        let driverCount = 0;
+        let vehicleCount = 0;
+        
+        function addDriver() {
+            driverCount++;
+            const container = document.getElementById('driversContainer');
+            
+            const driverHTML = `
+                <div class="entry-container" id="driver${driverCount}">
+                    <div class="entry-header">
+                        Driver #${driverCount}
+                        <button type="button" class="btn-remove" onclick="removeDriver(${driverCount})">Remove</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="driverName${driverCount}">Driver Name <span class="required">*</span></label>
+                            <input type="text" id="driverName${driverCount}" name="driverName${driverCount}" required 
+                                   placeholder="Full legal name">
+                            <div class="error-message">Driver name is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="driverDOB${driverCount}">Date of Birth <span class="required">*</span></label>
+                            <input type="date" id="driverDOB${driverCount}" name="driverDOB${driverCount}" required>
+                            <div class="error-message">Date of birth is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="driverLicense${driverCount}">Driver's License # <span class="required">*</span></label>
+                            <input type="text" id="driverLicense${driverCount}" name="driverLicense${driverCount}" required 
+                                   placeholder="DL123456789">
+                            <div class="error-message">Driver's license number is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="driverState${driverCount}">License State <span class="required">*</span></label>
+                            <select id="driverState${driverCount}" name="driverState${driverCount}" required>
+                                <option value="">Select state...</option>
+                                <option value="CA">California</option>
+                                <option value="TX">Texas</option>
+                                <option value="NV">Nevada</option>
+                                <option value="OR">Oregon</option>
+                                <option value="WA">Washington</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="ID">Idaho</option>
+                                <option value="UT">Utah</option>
+                                <option value="CO">Colorado</option>
+                                <option value="Other">Other State</option>
+                            </select>
+                            <div class="error-message">License state is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="driverExperience${driverCount}">Years CDL Experience <span class="required">*</span></label>
+                            <select id="driverExperience${driverCount}" name="driverExperience${driverCount}" required>
+                                <option value="">Select experience...</option>
+                                <option value="0-1">0-1 years</option>
+                                <option value="2-3">2-3 years</option>
+                                <option value="4-5">4-5 years</option>
+                                <option value="6-10">6-10 years</option>
+                                <option value="11-15">11-15 years</option>
+                                <option value="16+">16+ years</option>
+                            </select>
+                            <div class="error-message">CDL experience is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="driverHireDate${driverCount}">Date of Hire</label>
+                            <input type="date" id="driverHireDate${driverCount}" name="driverHireDate${driverCount}">
+                            <div class="notes">When did this driver start with your company?</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="driverOwnerOperator${driverCount}" name="driverOwnerOperator${driverCount}">
+                                <label for="driverOwnerOperator${driverCount}">Owner Operator</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="driverViolations${driverCount}">Moving Violations (Last 3 Years)</label>
+                            <select id="driverViolations${driverCount}" name="driverViolations${driverCount}">
+                                <option value="0">No violations</option>
+                                <option value="1">1 violation</option>
+                                <option value="2">2 violations</option>
+                                <option value="3">3 violations</option>
+                                <option value="4+">4+ violations</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', driverHTML);
+        }
+        
+        function removeDriver(driverNum) {
+            const element = document.getElementById(`driver${driverNum}`);
+            if (element) {
+                element.remove();
+            }
+        }
+        
+        function addVehicle() {
+            vehicleCount++;
+            const container = document.getElementById('vehiclesContainer');
+            
+            const vehicleHTML = `
+                <div class="entry-container" id="vehicle${vehicleCount}">
+                    <div class="entry-header">
+                        Vehicle #${vehicleCount}
+                        <button type="button" class="btn-remove" onclick="removeVehicle(${vehicleCount})">Remove</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="vehicleYear${vehicleCount}">Year <span class="required">*</span></label>
+                            <input type="number" id="vehicleYear${vehicleCount}" name="vehicleYear${vehicleCount}" required 
+                                   placeholder="2020" min="1990" max="2025">
+                            <div class="error-message">Vehicle year is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleMake${vehicleCount}">Make <span class="required">*</span></label>
+                            <select id="vehicleMake${vehicleCount}" name="vehicleMake${vehicleCount}" required>
+                                <option value="">Select make...</option>
+                                <option value="Freightliner">Freightliner</option>
+                                <option value="Peterbilt">Peterbilt</option>
+                                <option value="Kenworth">Kenworth</option>
+                                <option value="Volvo">Volvo</option>
+                                <option value="Mack">Mack</option>
+                                <option value="International">International</option>
+                                <option value="Western Star">Western Star</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="GMC">GMC</option>
+                                <option value="Ram">Ram</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="error-message">Vehicle make is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleModel${vehicleCount}">Model</label>
+                            <input type="text" id="vehicleModel${vehicleCount}" name="vehicleModel${vehicleCount}" 
+                                   placeholder="Cascadia, 389, T680, etc.">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleVIN${vehicleCount}">VIN/Serial # <span class="required">*</span></label>
+                            <input type="text" id="vehicleVIN${vehicleCount}" name="vehicleVIN${vehicleCount}" required 
+                                   placeholder="17-digit VIN number">
+                            <div class="error-message">VIN number is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleType${vehicleCount}">Vehicle Type <span class="required">*</span></label>
+                            <select id="vehicleType${vehicleCount}" name="vehicleType${vehicleCount}" required>
+                                <option value="">Select type...</option>
+                                <option value="Tractor">Tractor (Power Unit)</option>
+                                <option value="Straight Truck">Straight Truck</option>
+                                <option value="Semi-Trailer">Semi-Trailer</option>
+                                <option value="Full Trailer">Full Trailer</option>
+                                <option value="Dump Truck">Dump Truck</option>
+                                <option value="Flatbed Truck">Flatbed Truck</option>
+                                <option value="Box Truck">Box Truck</option>
+                                <option value="Pickup Truck">Pickup Truck</option>
+                            </select>
+                            <div class="error-message">Vehicle type is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleGVW${vehicleCount}">GVWR/GVW <span class="required">*</span></label>
+                            <select id="vehicleGVW${vehicleCount}" name="vehicleGVW${vehicleCount}" required>
+                                <option value="">Select weight...</option>
+                                <option value="10,001-26,000">10,001-26,000 lbs</option>
+                                <option value="26,001-33,000">26,001-33,000 lbs</option>
+                                <option value="33,001-60,000">33,001-60,000 lbs</option>
+                                <option value="60,001-80,000">60,001-80,000 lbs</option>
+                                <option value="80,001+">80,001+ lbs</option>
+                            </select>
+                            <div class="error-message">Vehicle weight is required</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleValue${vehicleCount}">Stated Value <span class="required">*</span></label>
+                            <input type="text" id="vehicleValue${vehicleCount}" name="vehicleValue${vehicleCount}" required 
+                                   placeholder="$150,000">
+                            <div class="error-message">Vehicle value is required</div>
+                            <div class="notes">Current market/replacement value</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleMiles${vehicleCount}">Annual Miles</label>
+                            <select id="vehicleMiles${vehicleCount}" name="vehicleMiles${vehicleCount}">
+                                <option value="0-25,000">0-25,000</option>
+                                <option value="25,001-50,000">25,001-50,000</option>
+                                <option value="50,001-75,000">50,001-75,000</option>
+                                <option value="75,001-100,000">75,001-100,000</option>
+                                <option value="100,001-125,000">100,001-125,000</option>
+                                <option value="125,001+">125,001+</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicleRadius${vehicleRadius}">Operating Radius</label>
+                            <select id="vehicleRadius${vehicleCount}" name="vehicleRadius${vehicleCount}">
+                                <option value="Local (50 miles)">Local (50 miles)</option>
+                                <option value="Intermediate (51-200 miles)">Intermediate (51-200 miles)</option>
+                                <option value="Long Haul (200+ miles)">Long Haul (200+ miles)</option>
+                                <option value="500+ miles">500+ miles</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="vehicleOwnerOperator${vehicleCount}" name="vehicleOwnerOperator${vehicleCount}">
+                                <label for="vehicleOwnerOperator${vehicleCount}">Owner Operator Vehicle</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', vehicleHTML);
+        }
+        
+        function removeVehicle(vehicleNum) {
+            const element = document.getElementById(`vehicle${vehicleNum}`);
+            if (element) {
+                element.remove();
+            }
+        }
         
         function toggleCoverageDetails(coverageId) {
             const checkbox = document.getElementById(coverageId);
